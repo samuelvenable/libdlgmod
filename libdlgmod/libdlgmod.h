@@ -64,10 +64,7 @@ EXPORTED_FUNCTION bool widget_get_canceled();
 
 namespace dialog_module {
 
-  int show_message(const char *str) {
-    return dialog_module::show_message()
-  }
-
+  int show_message(const char *str);
   int show_message_cancelable(const char *str);
   int show_question(const char *str);
   int show_question_cancelable(const char *str);
