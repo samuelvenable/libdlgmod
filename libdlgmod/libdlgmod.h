@@ -98,126 +98,126 @@ namespace dialog_module {
   
 } // namespace dialog_module
 
-int show_message(const char *str) {
+inline int show_message(const char *str) {
   return dialog_module::show_message(str);
 }
 
-int show_message_cancelable(const char *str) {
+inline int show_message_cancelable(const char *str) {
   return dialog_module::show_message_cancelable(str);
 }
 
-int show_question(const char *str) {
+inline int show_question(const char *str) {
   return dialog_module::show_question(str);
 }
 
-int show_question_cancelable(const char *str) {
+inline int show_question_cancelable(const char *str) {
   return dialog_module::show_question_cancelable(str);
 }
 
-int show_attempt(const char *str) {
+inline int show_attempt(const char *str) {
   return dialog_module::show_attempt(str);
 }
 
-int show_error(const char *str, bool abort) {
+inline int show_error(const char *str, bool abort) {
   return dialog_module::show_error(str, abort);
 }
 
-const char *get_string(const char *str, const char *def) {
+inline const char *get_string(const char *str, const char *def) {
   return dialog_module::get_string(str, def);
 }
 
-const char *get_password(const char *str, const char *def) {
+inline const char *get_password(const char *str, const char *def) {
   return dialog_module::get_password(str, def);
 }
 
-double get_integer(const char *str, double def) {
+inline double get_integer(const char *str, double def) {
   return dialog_module::get_integer(str, def);
 }
 
-double get_passcode(const char *str, double def) {
+inline double get_passcode(const char *str, double def) {
   return dialog_module::get_passcode(str, def);
 }
 
-const char *get_open_filename(const char *filter, const char *fname) {
+inline const char *get_open_filename(const char *filter, const char *fname) {
   return dialog_module::get_open_filename(filter, fname);
 }
 
-const char *get_open_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
+inline const char *get_open_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   return dialog_module::get_open_filename_ext(filter, fname, dir, title);
 }
 
-const char *get_open_filenames(const char *filter, const char *fname) {
+inline const char *get_open_filenames(const char *filter, const char *fname) {
   return dialog_module::get_open_filenames(filter, fname);
 }
 
-const char *get_open_filenames_ext(const char *filter, const char *fname, const char *dir, const char *title) {
+inline const char *get_open_filenames_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   return dialog_module::get_open_filenames_ext(filter, fname, dir, title);
 }
 
-const char *get_save_filename(const char *filter, const char *fname) {
+inline const char *get_save_filename(const char *filter, const char *fname) {
   return dialog_module::get_save_filename(filter, fname);
 }
 
-const char *get_save_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
+inline const char *get_save_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   return dialog_module::get_save_filename_ext(filter, fname, dir, title);
 }
 
-const char *get_directory(const char *dname) {
+inline const char *get_directory(const char *dname) {
   return dialog_module::get_directory(dname);
 }
 
-const char *get_directory_alt(const char *capt, const char *root) {
+inline const char *get_directory_alt(const char *capt, const char *root) {
   return dialog_module::get_directory_alt(capt, root);
 }
 
-int get_color(int defcol) {
+inline int get_color(int defcol) {
   return dialog_module::get_color(defcol);
 }
 
-int get_color_ext(int defcol, const char *title) {
+inline int get_color_ext(int defcol, const char *title) {
   return dialog_module::get_color_ext(defcol, title);
 }
 
-const char *widget_get_caption() {
+inline const char *widget_get_caption() {
   return dialog_module::widget_get_caption();
 }
 
-void widget_set_caption(const char *str) {
+inline void widget_set_caption(const char *str) {
   dialog_module::widget_set_caption(str);
 }
 
-const char *widget_get_icon() {
+inline const char *widget_get_icon() {
   return dialog_module::widget_get_icon();
 }
 
-void widget_set_icon(const char *icon) {
+inline void widget_set_icon(const char *icon) {
   dialog_module::widget_set_icon(icon);
 }
 
-const char *widget_get_owner() {
+inline const char *widget_get_owner() {
   return dialog_module::widget_get_owner();
 }
 
-void widget_set_owner(const char *hwnd) {
+inline void widget_set_owner(const char *hwnd) {
   dialog_module::widget_set_owner(hwnd);
 }
 
-const char *widget_get_system() {
+inline const char *widget_get_system() {
   return dialog_module::widget_get_system();
 }
 
-void widget_set_system(const char *sys) {
+inline void widget_set_system(const char *sys) {
   dialog_module::widget_set_system(sys);
 }
 
-const char *widget_get_button_name(int type) {
+inline const char *widget_get_button_name(int type) {
   return dialog_module::widget_get_button_name(type);
 }
 
-void widget_set_button_name(int type, const char *name) {
+inline void widget_set_button_name(int type, const char *name) {
   dialog_module::widget_set_button_name(type, name);
 }
 
-bool widget_get_canceled() {
+inline bool widget_get_canceled() {
   return dialog_module::widget_get_canceled();
 }
