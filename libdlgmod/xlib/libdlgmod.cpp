@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright © 2021-2024 Samuel Venable
+ Copyright © 2021-2026 Samuel Venable
  Copyright © 2021 Nikita Krapivin
  Copyright © 2021 Robert B. Colton
 
@@ -340,7 +340,7 @@ int make_color_rgb(unsigned char r, unsigned char g, unsigned char b) {
   return r | (g << 8) | (b << 16);
 }
 
-int show_message_helperfunc(char *str) {
+int show_message_helperfunc(const char *str) {
   change_relative_to_kde();
   string str_command;
   string str_title = message_cancel ? add_escaping(caption, true, "Question") : add_escaping(caption, true, "Information");
@@ -386,7 +386,7 @@ int show_message_helperfunc(char *str) {
   return (int)result;
 }
 
-int show_question_helperfunc(char *str) {
+int show_question_helperfunc(const char *str) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(caption, true, "Question");
@@ -424,27 +424,27 @@ int show_question_helperfunc(char *str) {
 
 } // anonymous namespace
 
-int show_message(char *str) {
+int show_message(const char *str) {
   message_cancel = false;
   return show_message_helperfunc(str);
 }
 
-int show_message_cancelable(char *str) {
+int show_message_cancelable(const char *str) {
   message_cancel = true;
   return show_message_helperfunc(str);
 }
 
-int show_question(char *str) {
+int show_question(const char *str) {
   question_cancel = false;
   return show_question_helperfunc(str);
 }
 
-int show_question_cancelable(char *str) {
+int show_question_cancelable(const char *str) {
   question_cancel = true;
   return show_question_helperfunc(str);
 }
 
-int show_attempt(char *str) {
+int show_attempt(const char *str) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(caption, true, "Error");
@@ -473,7 +473,7 @@ int show_attempt(char *str) {
   return (int)result;
 }
 
-int show_error(char *str, bool abort) {
+int show_error(const char *str, bool abort) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(caption, true, "Error");
@@ -522,7 +522,7 @@ int show_error(char *str, bool abort) {
   return (int)result;
 }
 
-char *get_string(char *str, char *def) {
+const char *get_string(const char *str, const char *def) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(caption, true, "Input Query");
@@ -549,10 +549,10 @@ char *get_string(char *str, char *def) {
   result = create_shell_dialog(str_command);
   if (result.empty()) cancel_pressed = true;
   caption = caption_previous;
-  return (char *)result.c_str();
+  return result.c_str();
 }
 
-char *get_password(char *str, char *def) {
+const char *get_password(const char *str, const char *def) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(caption, true, "Input Query");
@@ -579,10 +579,10 @@ char *get_password(char *str, char *def) {
   result = create_shell_dialog(str_command);
   if (result.empty()) cancel_pressed = true;
   caption = caption_previous;
-  return (char *)result.c_str();
+  return result.c_str();
 }
 
-double get_integer(char *str, double def) {
+double get_integer(const char *str, double def) {
   double DIGITS_MIN = -999999999999999;
   double DIGITS_MAX = 999999999999999;
 
@@ -590,7 +590,7 @@ double get_integer(char *str, double def) {
   if (def > DIGITS_MAX) def = DIGITS_MAX;
 
   string str_def = remove_trailing_zeros(def);
-  string str_result = get_string(str, (char *)str_def.c_str());
+  string str_result = get_string(str, str_def.c_str());
   if (str_result.empty()) cancel_pressed = true;
   double result = strtod(str_result.c_str(), nullptr);
 
@@ -599,7 +599,7 @@ double get_integer(char *str, double def) {
   return result;
 }
 
-double get_passcode(char *str, double def) {
+double get_passcode(const char *str, double def) {
   double DIGITS_MIN = -999999999999999;
   double DIGITS_MAX = 999999999999999;
 
@@ -607,7 +607,7 @@ double get_passcode(char *str, double def) {
   if (def > DIGITS_MAX) def = DIGITS_MAX;
 
   string str_def = remove_trailing_zeros(def);
-  string str_result = get_password(str, (char *)str_def.c_str());
+  string str_result = get_password(str, str_def.c_str());
   if (str_result.empty()) cancel_pressed = true;
   double result = strtod(str_result.c_str(), nullptr);
 
@@ -616,11 +616,11 @@ double get_passcode(char *str, double def) {
   return result;
 }
 
-char *get_open_filename(char *filter, char *fname) {
-  return get_open_filename_ext(filter, fname, (char *)"", (char *)"Open");
+const char *get_open_filename(const char *filter, const char *fname) {
+  return get_open_filename_ext(filter, fname, "", "Open");
 }
 
-char *get_open_filename_ext(char *filter, char *fname, char *dir, char *title) {
+const char *get_open_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   change_relative_to_kde();
   string str_command; string pwd;
   string caption_previous = caption;
@@ -650,15 +650,15 @@ char *get_open_filename_ext(char *filter, char *fname, char *dir, char *title) {
   result = create_shell_dialog(str_command);
   caption = caption_previous;
   if (file_exists(result))
-    return (char *)result.c_str();
-  return (char *)"";
+    return result.c_str();
+  return "";
 }
 
-char *get_open_filenames(char *filter, char *fname) {
-  return get_open_filenames_ext(filter, fname, (char *)"", (char *)"Open");
+const char *get_open_filenames(const char *filter, const char *fname) {
+  return get_open_filenames_ext(filter, fname, "", "Open");
 }
 
-char *get_open_filenames_ext(char *filter, char *fname, char *dir, char *title) {
+const char *get_open_filenames_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   change_relative_to_kde();
   string str_command; string pwd;
   string caption_previous = caption;
@@ -694,15 +694,15 @@ char *get_open_filenames_ext(char *filter, char *fname, char *dir, char *title) 
       success = false;
   }
   if (success)
-    return (char *)result.c_str();
-  return (char *)"";
+    return result.c_str();
+  return "";
 }
 
-char *get_save_filename(char *filter, char *fname) {
-  return get_save_filename_ext(filter, fname, (char *)"", (char *)"Save As");
+const char *get_save_filename(const char *filter, const char *fname) {
+  return get_save_filename_ext(filter, fname, "", "Save As");
 }
 
-char *get_save_filename_ext(char *filter, char *fname, char *dir, char *title) {
+const char *get_save_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
   change_relative_to_kde();
   string str_command; string pwd;
   string caption_previous = caption;
@@ -731,14 +731,14 @@ char *get_save_filename_ext(char *filter, char *fname, char *dir, char *title) {
   static string result;
   result = create_shell_dialog(str_command);
   caption = caption_previous;
-  return (char *)result.c_str();
+  return result.c_str();
 }
 
-char *get_directory(char *dname) {
-  return get_directory_alt((char *)"Select Directory", dname);
+const char *get_directory(const char *dname) {
+  return get_directory_alt("Select Directory", dname);
 }
 
-char *get_directory_alt(char *capt, char *root) {
+const char *get_directory_alt(const char *capt, const char *root) {
   change_relative_to_kde();
   string str_command; string pwd;
   string caption_previous = caption;
@@ -764,18 +764,18 @@ char *get_directory_alt(char *capt, char *root) {
   result = create_shell_dialog(str_command);
   caption = caption_previous;
   if (result.empty() || result == "/") {
-    return (char *)result.c_str();
+    return result.c_str();
   }
   static string final_result;
   final_result = result + std::string("/");
-  return (char *)final_result.c_str();
+  return final_result.c_str();
 }
 
 int get_color(int defcol) {
-  return get_color_ext(defcol, (char *)"Color");
+  return get_color_ext(defcol, "Color");
 }
 
-int get_color_ext(int defcol, char *title) {
+int get_color_ext(int defcol, const char *title) {
   change_relative_to_kde();
   string str_command;
   string str_title = add_escaping(title, true, "Color");
@@ -844,46 +844,46 @@ int get_color_ext(int defcol, char *title) {
   return (int)make_color_rgb(red, green, blue);
 }
 
-char *widget_get_caption() {
-  return (char *)caption.c_str();
+const char *widget_get_caption() {
+  return caption.c_str();
 }
 
-void widget_set_caption(char *title) {
+void widget_set_caption(const char *title) {
   caption = title ? title : "";
 }
 
-char *widget_get_owner() {
+const char *widget_get_owner() {
   static string result;
-  result = to_string((long long)owner);
-  return (char *)result.c_str();
+  result = to_string((unsigned long long)owner);
+  return result.c_str();
 }
 
-void widget_set_owner(char *hwnd) {
+void widget_set_owner(const char *hwnd) {
   string str_hwnd = hwnd;
   owner = (void *)strtoll(str_hwnd.c_str(), nullptr, 10);
 }
 
-char *widget_get_icon() {
+const char *widget_get_icon() {
   if (current_icon == "")
     current_icon = filename_absolute("assets/icon.png");
-  return (char *)current_icon.c_str();
+  return current_icon.c_str();
 }
 
-void widget_set_icon(char *icon) {
+void widget_set_icon(const char *icon) {
   current_icon = filename_absolute(icon);
 }
 
-char *widget_get_system() {
+const char *widget_get_system() {
   if (dm_dialogengine == dm_zenity)
-    return (char *)"Zenity";
+    return "Zenity";
 
   if (dm_dialogengine == dm_kdialog)
-    return (char *)"KDialog";
+    return "KDialog";
 
-  return (char *)"X11";
+  return "X11";
 }
 
-void widget_set_system(char *sys) {
+void widget_set_system(const char *sys) {
   string str_sys = sys;
 
   if (str_sys == "X11")
@@ -896,13 +896,13 @@ void widget_set_system(char *sys) {
     dm_dialogengine = dm_kdialog;
 }
 
-void widget_set_button_name(int type, char *name) {
+void widget_set_button_name(int type, const char *name) {
   string str_name = name;
   btn_array[type] = str_name;
 }
 
-char *widget_get_button_name(int type) {
-  return (char *)btn_array[type].c_str();
+const char *widget_get_button_name(int type) {
+  return btn_array[type].c_str();
 }
 
 bool widget_get_canceled() {

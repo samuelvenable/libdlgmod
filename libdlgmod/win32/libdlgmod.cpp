@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright © 2021-2024 Samuel Venable
+ Copyright © 2021-2026 Samuel Venable
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -186,7 +186,7 @@ namespace dialog_module {
       return win;
     }
 
-    int show_message_helper(char *str, bool cancelable) {
+    int show_message_helper(const char *str, bool cancelable) {
       string tstr = str; wstring wstr = widen(tstr);
 
       string title = (caption == "") ? (cancelable ? "Question" : "Information") : caption;
@@ -199,7 +199,7 @@ namespace dialog_module {
       return cancelable ? ((result == IDOK) ? 1 : -1) : 1;
     }
 
-    int show_question_helper(char *str, bool cancelable) {
+    int show_question_helper(const char *str, bool cancelable) {
       string tstr = str; wstring wstr = widen(tstr);
 
       string title = (caption == "") ? "Question" : caption;
@@ -212,7 +212,7 @@ namespace dialog_module {
       return cancelable ? ((result == IDYES) ? 1 : ((result == IDNO) ? 0 : -1)) : (result == IDYES);
     }
 
-    int show_error_helper(char *str, bool abort, bool attempt) {
+    int show_error_helper(const char *str, bool abort, bool attempt) {
       string tstr = str; wstring wstr = widen(tstr);
 
       string title = (caption == "") ? "Error" : caption;
@@ -601,7 +601,7 @@ namespace dialog_module {
     #ifndef _MSC_VER
     std::string InputBoxResult;
     #endif
-    char *InputBox(char *Prompt, char *Title, char *Default) {
+    const char *InputBox(const char *Prompt, const char *Title, const char *Default) {
       #ifdef _MSC_VER
       HRESULT hr = S_OK;
       hr = CoInitialize(nullptr);
@@ -646,14 +646,14 @@ namespace dialog_module {
       #else
       FILE *fp = nullptr;
       wstring wfname = widen("C:\\Windows\\Temp\\temp.XXXXXX"); 
-      wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return (char *)"";
+      wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
       if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
-        return (char *)"";
+        return "";
       }
-      if (!fp) return (char *)"";
+      if (!fp) return "";
       Evaluation = "WScript.Echo " + Evaluation;
       std::size_t result = fwrite(Evaluation.data(), sizeof(char), Evaluation.length(), fp);
-      if (result < Evaluation.length()) { fclose(fp); return (char *)""; }
+      if (result < Evaluation.length()) { fclose(fp); return ""; }
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + std::wstring(L".vbs")).c_str());
       ngs::ps::ngs_proc_id_t proc_id = ngs::ps::spawn_child_proc_id((std::string("cscript.exe /nologo \"") + narrow(wbuff) + std::string(".vbs\"")).c_str(), false);
@@ -730,12 +730,12 @@ namespace dialog_module {
       if (strResult.empty()) {
         cancel_pressed = true;
       }
-      return (char *)strResult.c_str();
+      return strResult.c_str();
     }
 
-    char *get_string_helper(char *str, char *def, bool hide) {
+    const char *get_string_helper(const char *str, const char *def, bool hide) {
       hidden = hide; string title = (caption == "") ? "Input Query" : caption;
-      return InputBox(str, (char *)title.c_str(), def);
+      return InputBox(str, title.c_str(), def);
     }
 
     string remove_trailing_zeros(double numb) {
@@ -747,7 +747,7 @@ namespace dialog_module {
       return strnumb;
     }
 
-    double get_integer_helper(char *str, double def, bool hide) {
+    double get_integer_helper(const char *str, double def, bool hide) {
       double DIGITS_MIN = -999999999999999;
       double DIGITS_MAX = 999999999999999;
 
@@ -755,7 +755,7 @@ namespace dialog_module {
       if (def > DIGITS_MAX) def = DIGITS_MAX;
 
       string cpp_tdef = remove_trailing_zeros(def);
-      double result = strtod(get_string_helper(str, (char *)cpp_tdef.c_str(), hide), nullptr);
+      double result = strtod(get_string_helper(str, cpp_tdef.c_str(), hide), nullptr);
 
       if (result < DIGITS_MIN) result = DIGITS_MIN;
       if (result > DIGITS_MAX) result = DIGITS_MAX;
@@ -949,7 +949,7 @@ namespace dialog_module {
 
   } // anonymous namespace
 
-  int show_message(char *str) {
+  int show_message(const char *str) {
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
     hhook = SetWindowsHookEx(WH_CBT, &MessageBoxProc, ModHwnd, ThreadID);
@@ -959,7 +959,7 @@ namespace dialog_module {
     return result;
   }
 
-  int show_message_cancelable(char *str) {
+  int show_message_cancelable(const char *str) {
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
     hhook = SetWindowsHookEx(WH_CBT, &MessageBoxProc, ModHwnd, ThreadID);
@@ -969,7 +969,7 @@ namespace dialog_module {
     return result;
   }
 
-  int show_question(char *str) {
+  int show_question(const char *str) {
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
     hhook = SetWindowsHookEx(WH_CBT, &MessageBoxProc, ModHwnd, ThreadID);
@@ -979,7 +979,7 @@ namespace dialog_module {
     return result;
   }
 
-  int show_question_cancelable(char *str) {
+  int show_question_cancelable(const char *str) {
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
     hhook = SetWindowsHookEx(WH_CBT, &MessageBoxProc, ModHwnd, ThreadID);
@@ -989,7 +989,7 @@ namespace dialog_module {
     return result;
   }
 
-  int show_attempt(char *str) {
+  int show_attempt(const char *str) {
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
     hhook = SetWindowsHookEx(WH_CBT, &MessageBoxProc, ModHwnd, ThreadID);
@@ -999,7 +999,7 @@ namespace dialog_module {
     return result;
   }
 
-  int show_error(char *str, bool abort) {
+  int show_error(const char *str, bool abort) {
     fatal = abort;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1010,31 +1010,31 @@ namespace dialog_module {
     return result;
   }
 
-  char *get_string(char *str, char *def) {
-    char *result = get_string_helper(str, def, false);
+  const char *get_string(const char *str, const char *def) {
+    const char *result = get_string_helper(str, def, false);
     regain_focus_to_owner();
     return result;
   }
 
-  char *get_password(char *str, char *def) {
-    char *result = get_string_helper(str, def, true);
+  const char *get_password(const char *str, const char *def) {
+    const char *result = get_string_helper(str, def, true);
     regain_focus_to_owner();
     return result;
   }
 
-  double get_integer(char *str, double def) {
+  double get_integer(const char *str, double def) {
     double result = get_integer_helper(str, def, false);
     regain_focus_to_owner();
     return result;
   }
 
-  double get_passcode(char *str, double def) {
+  double get_passcode(const char *str, double def) {
     double result = get_integer_helper(str, def, true);
     regain_focus_to_owner();
     return result;
   }
 
-  char *get_open_filename(char *filter, char *fname) {
+  const char *get_open_filename(const char *filter, const char *fname) {
     string str_filter = filter; string str_fname = fname; static string result;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1042,10 +1042,10 @@ namespace dialog_module {
     result = get_open_filename_helper(str_filter, str_fname, "", "");
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_open_filename_ext(char *filter, char *fname, char *dir, char *title) {
+  const char *get_open_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
     string str_filter = filter; string str_fname = fname;
     string str_dir = dir; string str_title = title; static string result;
     DWORD ThreadID = GetCurrentThreadId();
@@ -1054,10 +1054,10 @@ namespace dialog_module {
     result = get_open_filename_helper(str_filter, str_fname, str_dir, str_title);
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_open_filenames(char *filter, char *fname) {
+  const char *get_open_filenames(const char *filter, const char *fname) {
     string str_filter = filter; string str_fname = fname; static string result;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1065,10 +1065,10 @@ namespace dialog_module {
     result = get_open_filenames_helper(str_filter, str_fname, "", "");
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_open_filenames_ext(char *filter, char *fname, char *dir, char *title) {
+  const char *get_open_filenames_ext(const char *filter, const char *fname, const char *dir, const char *title) {
     string str_filter = filter; string str_fname = fname;
     string str_dir = dir; string str_title = title; static string result;
     DWORD ThreadID = GetCurrentThreadId();
@@ -1077,10 +1077,10 @@ namespace dialog_module {
     result = get_open_filenames_helper(str_filter, str_fname, str_dir, str_title);
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_save_filename(char *filter, char *fname) {
+  const char *get_save_filename(const char *filter, const char *fname) {
     string str_filter = filter; string str_fname = fname; static string result;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1088,10 +1088,10 @@ namespace dialog_module {
     result = get_save_filename_helper(str_filter, str_fname, "", "");
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_save_filename_ext(char *filter, char *fname, char *dir, char *title) {
+  const char *get_save_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
     string str_filter = filter; string str_fname = fname;
     string str_dir = dir; string str_title = title; static string result;
     DWORD ThreadID = GetCurrentThreadId();
@@ -1100,10 +1100,10 @@ namespace dialog_module {
     result = get_save_filename_helper(str_filter, str_fname, str_dir, str_title);
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_directory(char *dname) {
+  const char *get_directory(const char *dname) {
     string str_dname = dname;  static string result;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1111,10 +1111,10 @@ namespace dialog_module {
     result = get_directory_helper(str_dname, "");
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
-  char *get_directory_alt(char *capt, char *root) {
+  const char *get_directory_alt(const char *capt, const char *root) {
     string str_dname = root; string str_title = capt; static string result;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1122,7 +1122,7 @@ namespace dialog_module {
     result = get_directory_helper(str_dname, str_title);
     UnhookWindowsHookEx(hhook);
     regain_focus_to_owner();
-    return (char *)result.c_str();
+    return result.c_str();
   }
 
   int get_color(int defcol) {
@@ -1135,7 +1135,7 @@ namespace dialog_module {
     return result;
   }
 
-  int get_color_ext(int defcol, char *title) {
+  int get_color_ext(int defcol, const char *title) {
     string str_title = title;
     DWORD ThreadID = GetCurrentThreadId();
     HINSTANCE ModHwnd = GetModuleHandle(nullptr);
@@ -1146,25 +1146,25 @@ namespace dialog_module {
     return result;
   }
 
-  char *widget_get_caption() {
-    return (char *)caption.c_str();
+  const char *widget_get_caption() {
+    return caption.c_str();
   }
 
-  void widget_set_caption(char *str) {
+  void widget_set_caption(const char *str) {
     caption = str;
   }
 
-  char *widget_get_owner() {
+  const char *widget_get_owner() {
     static string hwnd;
     hwnd = std::to_string((unsigned long long)owner);
-    return (char *)hwnd.c_str();
+    return hwnd.c_str();
   }
 
-  void widget_set_owner(char *hwnd) {
+  void widget_set_owner(const char *hwnd) {
     owner = (void *)strtoull(hwnd, nullptr, 10);
   }
 
-  char *widget_get_icon() {
+  const char *widget_get_icon() {
     static string tstr_result;
     wchar_t wstr_icon[MAX_PATH];
     wstring cpp_wstr_icon = widen(tstr_icon);
@@ -1173,10 +1173,10 @@ namespace dialog_module {
         tstr_result = narrow(wstr_icon);
       }
     }
-    return (char *)tstr_result.c_str();
+    return tstr_result.c_str();
   }
 
-  void widget_set_icon(char *icon) {
+  void widget_set_icon(const char *icon) {
     wchar_t wstr_icon[MAX_PATH];
     wstring cpp_wstr_icon = widen(icon);
     if (_wrealpath(cpp_wstr_icon.c_str(), wstr_icon)) {
@@ -1186,21 +1186,21 @@ namespace dialog_module {
     }
   }
 
-  char *widget_get_system() {
-    return (char *)"Win32";
+  const char *widget_get_system() {
+    return "Win32";
   }
 
-  void widget_set_system(char *sys) {
+  void widget_set_system(const char *sys) {
 
   }
 
-  void widget_set_button_name(int type, char *name) {
+  void widget_set_button_name(int type, const char *name) {
     string str_name = name;
     btn_array[type] = str_name;
   }
 
-  char *widget_get_button_name(int type) {
-    return (char *)btn_array[type].c_str();
+  const char *widget_get_button_name(int type) {
+    return btn_array[type].c_str();
   }
 
   bool widget_get_canceled() {
