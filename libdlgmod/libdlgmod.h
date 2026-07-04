@@ -174,7 +174,7 @@ int get_color(int defcol) {
   return dialog_module::get_color(defcol);
 }
 
-double get_color_ext(int defcol, const char *title) {
+int get_color_ext(int defcol, const char *title) {
   return dialog_module::get_color_ext(defcol, title);
 }
 
