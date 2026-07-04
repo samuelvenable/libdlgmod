@@ -4,7 +4,7 @@ if [ `uname -o` = "Msys" ]; then
   ar rc "libdlgmod.a" "libdlgmod/general/libdlgmod.o" "libdlgmod/win32/libdlgmod.o" "libdlgmod/general/apiprocess/process.o" "libdlgmod/general/xprocess.o";
   rm -rf "libdlgmod/general/libdlgmod.o" "libdlgmod/win32/libdlgmod.o" "libdlgmod/general/apiprocess/process.o" "libdlgmod/general/xprocess.o";
 elif [ `uname` = "Darwin" ]; then
-  clang++ -c "libdlgmod/general/libdlgmod.cpp" -o "libdlgmod/general/libdlgmod.o" -c "libdlgmod/macos/libdlgmod.mm" -o "libdlgmod/macos/libdlgmod.o" -Ilibdlgmod/general -I. -std=c++17 -shared -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=10.13 -fPIC;
+  clang++ -c "libdlgmod/general/libdlgmod.cpp" -o "libdlgmod/general/libdlgmod.o" -c "libdlgmod/macos/libdlgmod.mm" -o "libdlgmod/macos/libdlgmod.o" -Ilibdlgmod/general -I. -std=c++17 -shared -ObjC++ -framework AppKit -framework UniformTypeIdentifiers -mmacos-version-min=10.13 -arch arm64 -arch x86_64 -fPIC;
   ar rc "libdlgmod.a" "libdlgmod/general/libdlgmod.o" "libdlgmod/macos/libdlgmod.o";
   rm -rf "libdlgmod/general/libdlgmod.o" "libdlgmod/macos/libdlgmod.o";
 elif [ `uname -o` = "GNU/Linux" ]; then
