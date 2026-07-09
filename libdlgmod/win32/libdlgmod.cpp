@@ -630,7 +630,7 @@ namespace dialog_module {
       if (!GetTempPathW(MAX_PATH + 1, &wfname[0])) {
         return "";
       }
-      wfname += "temp.XXXXXX";
+      wfname += L"temp.XXXXXX";
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
       if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
         return "";
