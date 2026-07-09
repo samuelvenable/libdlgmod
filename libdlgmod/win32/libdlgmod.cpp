@@ -346,8 +346,6 @@ namespace dialog_module {
 
       if (dlg != nullptr) {
         if (nCode == HCBT_ACTIVATE && init == true) {
-          SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
-          ShowWindow(dlg, SW_SHOW);
           if (hidden == true)
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
           init = false;
@@ -384,8 +382,6 @@ namespace dialog_module {
           init = true;
         }
         if (dlg != nullptr && init) {
-          SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
-          ShowWindow(dlg, SW_SHOW);
           wstring wstr_ok = widen(btn_array[BUTTON_OK]);
           wstring wstr_yes = widen(btn_array[BUTTON_YES]);
           wstring wstr_no = widen(btn_array[BUTTON_NO]);
@@ -428,8 +424,6 @@ namespace dialog_module {
           init = true;
         }
         if (dlg != nullptr && init) {
-          SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
-          ShowWindow(dlg, SW_SHOW);
           wstring wstr_abort = widen(btn_array[BUTTON_ABORT]);
           wstring wstr_ignore = widen(btn_array[BUTTON_IGNORE]);
           SetDlgItemTextW(dlg, IDOK, wstr_abort.c_str());
@@ -469,8 +463,6 @@ namespace dialog_module {
       }
 
       if (nCode == HCBT_ACTIVATE && init) {
-        SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
-        ShowWindow(dlg, SW_SHOW);
         init = false;
       }
       wstring cpp_wstr_icon = widen(tstr_icon);
@@ -534,8 +526,6 @@ namespace dialog_module {
       }
 
       if (nCode == HCBT_ACTIVATE && init) {
-        SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
-        ShowWindow(dlg, SW_SHOW);
         textbox = FindWindowEx(dlg, nullptr, "DUIViewWndClassName", nullptr);
         textbox = FindWindowEx(textbox, nullptr, "DirectUIHWND", nullptr);
         textbox = FindWindowEx(textbox, nullptr, "FloatNotifySink", nullptr);
