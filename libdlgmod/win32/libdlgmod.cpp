@@ -624,8 +624,13 @@ namespace dialog_module {
       hr = spVBScriptParse->ParseScriptText(WideEval.c_str(), nullptr, nullptr, nullptr, 0, 0, SCRIPTTEXT_ISEXPRESSION, &result, &ei);
       UnhookWindowsHookEx(hhook);
       #else
+      wstring wfname;
       FILE *fp = nullptr;
-      wstring wfname = widen("C:\\Windows\\Temp\\temp.XXXXXX"); 
+      wfname.resize(MAX_PATH + 1, L'\0');
+      if (!GetTempPathW(MAX_PATH + 1, &wfname[0])) {
+        return "";
+      }
+      wfname += "temp.XXXXXX";
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
       if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
         return "";
