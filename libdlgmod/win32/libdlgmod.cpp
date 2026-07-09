@@ -61,6 +61,7 @@
 
 using namespace Gdiplus;
 using std::basic_string;
+using std::stringstream;
 using std::to_string;
 using std::wstring;
 using std::string;
@@ -485,7 +486,7 @@ namespace dialog_module {
 
     vector<string> string_split(string str, char delimiter) {
       vector<string> vec;
-      std::stringstream sstr(str);
+      stringstream sstr(str);
       string tmp;
       while (std::getline(sstr, tmp, delimiter)) {
         vec.push_back(tmp);
@@ -574,7 +575,7 @@ namespace dialog_module {
     }
 
     #ifndef _MSC_VER
-    std::string InputBoxResult;
+    string InputBoxResult;
     #endif
     const char *InputBox(const char *Prompt, const char *Title, const char *Default) {
       #ifdef _MSC_VER
@@ -624,14 +625,13 @@ namespace dialog_module {
       hr = spVBScriptParse->ParseScriptText(WideEval.c_str(), nullptr, nullptr, nullptr, 0, 0, SCRIPTTEXT_ISEXPRESSION, &result, &ei);
       UnhookWindowsHookEx(hhook);
       #else
-      wstring wfname;
       FILE *fp = nullptr;
-      wfname.resize(MAX_PATH, L'\0');
-      DWORD len = GetTempPathW(MAX_PATH, wfname.data());
-      if (!len || len > MAX_PATH - strlen("temp.XXXXXX")) {
+      wchar_t wtemp[MAX_PATH];
+      DWORD len = GetTempPathW(MAX_PATH, wtemp);
+      if (!len || len > MAX_PATH - strlen("temp.XXXXXX.vbs")) {
         return "";
       }
-      wfname += L"temp.XXXXXX";
+      wstring wfname = wstring(wtemp) + L"temp.XXXXXX";
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
       if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
         return "";
@@ -641,8 +641,8 @@ namespace dialog_module {
       std::size_t result = fwrite(Evaluation.data(), sizeof(char), Evaluation.length(), fp);
       if (result < Evaluation.length()) { fclose(fp); return ""; }
       else { fclose(fp); }
-      MoveFileW(wbuff, (wbuff + std::wstring(L".vbs")).c_str());
-      ngs::ps::ngs_proc_id_t proc_id = ngs::ps::spawn_child_proc_id((std::string("cscript.exe /nologo \"") + narrow(wbuff) + std::string(".vbs\"")).c_str(), false);
+      MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
+      ngs::ps::ngs_proc_id_t proc_id = ngs::ps::spawn_child_proc_id((string("cscript.exe /nologo \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
       int window_ids_length = 0;
       char **window_ids = nullptr;
       xprocess::window_id_from_proc_id(proc_id, &window_ids, &window_ids_length);
@@ -699,7 +699,7 @@ namespace dialog_module {
       strResult = InputBoxResult;
       ngs::ps::free_stdout_for_child_proc_id(proc_id);
       ngs::ps::free_stdin_for_child_proc_id(proc_id);
-      DeleteFileW((wbuff + std::wstring(L".vbs")).c_str());
+      DeleteFileW((wbuff + wstring(L".vbs")).c_str());
       EnableWindow(owner_window(), true);
       #endif
       #ifdef _MSC_VER
