@@ -627,7 +627,7 @@ namespace dialog_module {
       FILE *fp = nullptr;
       wstring wfname = widen("C:\\Windows\\Temp\\temp.XXXXXX"); 
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-16LE" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UNICODE" )) {
         return "";
       }
       if (!fp) return "";
@@ -652,9 +652,9 @@ namespace dialog_module {
             cancel_pressed = false;
           }
           if (hidden == true) {
+            SendDlgItemMessageW(dlg, 1000, WM_SETTEXT, 0, (LPARAM)wstrDefault.c_str());
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
             SendDlgItemMessageW(dlg, 1000, WM_LBUTTONDOWN, 0, 0);
-            SetDlgItemTextW(dlg, 1000, wstrDefault.c_str());
           }
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
