@@ -626,9 +626,10 @@ namespace dialog_module {
       #else
       wstring wfname;
       FILE *fp = nullptr;
-      wfname.resize(MAX_PATH + 1, L'\0');
-      if (!GetTempPathW(MAX_PATH + 1, &wfname[0])) {
-        return "";
+      wfname.resize(MAX_PATH, L'\0');
+      DWORD len = GetTempPathW(MAX_PATH, wfname.data());
+      if (!len || len > MAX_PATH - strlen("temp.XXXXXX")) {
+        return (char *)"";
       }
       wfname += L"temp.XXXXXX";
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
