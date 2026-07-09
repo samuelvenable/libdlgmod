@@ -348,9 +348,6 @@ namespace dialog_module {
         if (nCode == HCBT_ACTIVATE && init == true) {
           SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
           ShowWindow(dlg, SW_SHOW);
-          SetWindowLongPtr(dlg, GWL_EXSTYLE, GetWindowLongPtr(dlg, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-          SetWindowPos(dlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-          EnableWindow(win, true);
           if (hidden == true)
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
           init = false;
@@ -389,9 +386,6 @@ namespace dialog_module {
         if (dlg != nullptr && init) {
           SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
           ShowWindow(dlg, SW_SHOW);
-          SetWindowLongPtr(dlg, GWL_EXSTYLE, GetWindowLongPtr(dlg, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-          SetWindowPos(dlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-          EnableWindow(win, true);
           wstring wstr_ok = widen(btn_array[BUTTON_OK]);
           wstring wstr_yes = widen(btn_array[BUTTON_YES]);
           wstring wstr_no = widen(btn_array[BUTTON_NO]);
@@ -436,9 +430,6 @@ namespace dialog_module {
         if (dlg != nullptr && init) {
           SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
           ShowWindow(dlg, SW_SHOW);
-          SetWindowLongPtr(dlg, GWL_EXSTYLE, GetWindowLongPtr(dlg, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-          SetWindowPos(dlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-          EnableWindow(win, true);
           wstring wstr_abort = widen(btn_array[BUTTON_ABORT]);
           wstring wstr_ignore = widen(btn_array[BUTTON_IGNORE]);
           SetDlgItemTextW(dlg, IDOK, wstr_abort.c_str());
@@ -480,9 +471,6 @@ namespace dialog_module {
       if (nCode == HCBT_ACTIVATE && init) {
         SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
         ShowWindow(dlg, SW_SHOW);
-        SetWindowLongPtr(dlg, GWL_EXSTYLE, GetWindowLongPtr(dlg, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-        SetWindowPos(dlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-        EnableWindow(win, true);
         init = false;
       }
       wstring cpp_wstr_icon = widen(tstr_icon);
@@ -548,9 +536,6 @@ namespace dialog_module {
       if (nCode == HCBT_ACTIVATE && init) {
         SetWindowLongPtr(dlg, GWLP_HWNDPARENT, (LONG_PTR)GetDesktopWindow());
         ShowWindow(dlg, SW_SHOW);
-        SetWindowLongPtr(dlg, GWL_EXSTYLE, GetWindowLongPtr(dlg, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-        SetWindowPos(dlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-        EnableWindow(win, true);
         textbox = FindWindowEx(dlg, nullptr, "DUIViewWndClassName", nullptr);
         textbox = FindWindowEx(textbox, nullptr, "DirectUIHWND", nullptr);
         textbox = FindWindowEx(textbox, nullptr, "FloatNotifySink", nullptr);
@@ -623,7 +608,12 @@ namespace dialog_module {
       // Replace quotes with double quotes
       string strPrompt = string_replace_all(Prompt, "\"", "\"\"");
       string strTitle = string_replace_all(Title, "\"", "\"\"");
+      #ifdef _MSC_VER
       string strDefault = string_replace_all(Default, "\"", "\"\"");
+      #else
+      string strDefault = ((!hidden) ? string_replace_all(Default, "\"", "\"\"") : "");
+      wstring wstrDefault = widen(Default);
+      #endif
 
       // Create evaluation string
       string Evaluation = "InputBox(\"" + strPrompt + "\", \"" + strTitle + "\", \"" + strDefault + "\")";
@@ -647,7 +637,7 @@ namespace dialog_module {
       FILE *fp = nullptr;
       wstring wfname = widen("C:\\Windows\\Temp\\temp.XXXXXX"); 
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-16LE" )) {
         return "";
       }
       if (!fp) return "";
@@ -674,6 +664,7 @@ namespace dialog_module {
           if (hidden == true) {
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
             SendDlgItemMessageW(dlg, 1000, WM_LBUTTONDOWN, 0, 0);
+            SetDlgItemTextW(dlg, 1000, wstrDefault.c_str());
           }
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
