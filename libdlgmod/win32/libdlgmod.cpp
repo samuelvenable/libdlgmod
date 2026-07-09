@@ -195,7 +195,7 @@ namespace dialog_module {
       UINT flags = MB_DEFBUTTON1 | MB_APPLMODAL;
       flags |= cancelable ? (MB_OKCANCEL | MB_ICONQUESTION) : (MB_OK | MB_ICONINFORMATION);
 
-      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags | MB_TOPMOST);
+      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags);
       return cancelable ? ((result == IDOK) ? 1 : -1) : 1;
     }
 
@@ -208,7 +208,7 @@ namespace dialog_module {
       UINT flags = MB_DEFBUTTON1 | MB_APPLMODAL | MB_ICONQUESTION;
       flags |= cancelable ? MB_YESNOCANCEL : MB_YESNO;
 
-      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags | MB_TOPMOST);
+      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags);
       return cancelable ? ((result == IDYES) ? 1 : ((result == IDNO) ? 0 : -1)) : (result == IDYES);
     }
 
@@ -220,12 +220,12 @@ namespace dialog_module {
 
       if (attempt) {
         UINT flags = MB_RETRYCANCEL | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL;
-        int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags | MB_TOPMOST);
+        int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags);
         return (result == IDRETRY) ? 0 : -1;
       }
 
       UINT flags = (abort ? MB_OK : MB_OKCANCEL) | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL;
-      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags | MB_TOPMOST);
+      int result = MessageBoxW(owner_window(), wstr.c_str(), wtitle.c_str(), flags);
       result = abort ? 1 : ((result == IDOK) ? 1 : -1);
 
       if (result == 1) exit(0);
