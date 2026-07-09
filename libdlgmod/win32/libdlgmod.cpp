@@ -629,7 +629,7 @@ namespace dialog_module {
       wfname.resize(MAX_PATH, L'\0');
       DWORD len = GetTempPathW(MAX_PATH, wfname.data());
       if (!len || len > MAX_PATH - strlen("temp.XXXXXX")) {
-        return (char *)"";
+        return "";
       }
       wfname += L"temp.XXXXXX";
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
