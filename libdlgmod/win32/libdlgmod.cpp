@@ -627,7 +627,7 @@ namespace dialog_module {
       FILE *fp = nullptr;
       wstring wfname = widen("C:\\Windows\\Temp\\temp.XXXXXX"); 
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) return "";
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UNICODE" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
         return "";
       }
       if (!fp) return "";
