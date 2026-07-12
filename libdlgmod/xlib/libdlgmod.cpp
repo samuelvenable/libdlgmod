@@ -767,7 +767,7 @@ const char *get_directory_alt(const char *capt, const char *root) {
     return result.c_str();
   }
   static string final_result;
-  final_result = result + std::string("/");
+  final_result = ((result.back() != '/') ? result + std::string("/") : result);
   return final_result.c_str();
 }
 
