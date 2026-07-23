@@ -1,7 +1,6 @@
 cd "${0%/*}";
 
 # build dynamic library:
-cd "${0%/*}"
 if [ `uname -o` = "Msys" ]; then
   g++ "libdlgmod/win32/libdlgmod.cpp" "libdlgmod/general/apiprocess/process.cpp" "libdlgmod/general/xprocess.cpp" -o "libdlgmod.dll" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -Ilibdlgmod/general -I. -std=c++17 -shared -static-libgcc -static-libstdc++ -static -lntdll -lgdiplus -lcomctl32 -lshlwapi -lcomdlg32 -lole32 -loleaut32 -luuid -fPIC;
 elif [ `uname` = "Darwin" ]; then
