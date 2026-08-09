@@ -475,7 +475,7 @@ NSArray *openPatternItems;
 const char *cocoa_get_open_filename(const char *filter, const char *fname, const char *dir, const char *title, bool mselect) {
   cancel_pressed = false;
   if (!owner || ![NSThread isMainThread]) {
-    printf("%s\n", string("osascript <<'EOF'\
+    printf("%s\n", (string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
 set theFiles to choose file with prompt \"") + string(title) + string("\" with multiple selections allowed default location targetFolder\
@@ -484,7 +484,7 @@ repeat with aFile in theFiles\
 end repeat\
 return output\
 EOF\
-").c_str());
+")).c_str());
     theOpenResult.clear();
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
