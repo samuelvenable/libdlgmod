@@ -1239,16 +1239,28 @@ int cocoa_get_color(int defcol, const char *title) {
     int newRedValue = (int)((redValue / 255) * 65535);
     int newGreenValue = (int)((greenValue / 255) * 65535);
     int newBlueValue = (int)((blueValue / 255) * 65535);
-    string strcol = osascript(true, string("choose color ") +
-    string("default color {") + std::to_string(newRedValue) + 
-    string(", ") + std::to_string(newGreenValue) + string(", ") +
-    std::to_string(newBlueValue) + string("}"));
+    string strcol = osascript(false, string(R"(osascript 2> /dev/null << 'EOF'
+set c to (choose color )") + string("default color {") + std::to_string(newRedValue) + string(", ") + std::to_string(newGreenValue) + string(", ") + std::to_string(newBlueValue) + string(R"(}
+set r to item 1 of c div 257
+set g to item 2 of c div 257
+set b to item 3 of c div 257
+return "rgb(" & r & "," & g & "," & b & ")"
+EOF
+)");
+    );
     if (!strcol.empty()) {
-      rescol = (int)strtol(strcol.c_str(), nullptr, 10);
-      int redValue = rescol & 0xFF;
-      int greenValue = (rescol >> 8) & 0xFF;
-      int blueValue = (rescol >> 16) & 0xFF;
-      rescol = (redValue & 0xFF) + ((greenValue & 0xFF) << 8) + ((blueValue & 0xFF) << 16);
+      int r = 0, g = 0, b = 0;
+      strcol = string_replace_all(strcol, "rgb(", "");
+      strcol = string_replace_all(strcol, ")", "");
+      std::vector<string> stringVec = string_split(strcol, ',');
+      unsigned int index = 0;
+      for (const string &str : stringVec) {
+        if (index == 0) r = (unsigned char)strtol(str.c_str(), nullptr, 10);
+        if (index == 1) g = (unsigned char)strtol(str.c_str(), nullptr, 10);
+        if (index == 2) b = (unsigned char)strtol(str.c_str(), nullptr, 10);
+        index += 1;
+      }
+      return (int)(r | (g << 8) | (b << 16));
     }
     return rescol;
   }
