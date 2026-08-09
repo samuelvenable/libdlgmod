@@ -1245,7 +1245,10 @@ int cocoa_get_color(int defcol, const char *title) {
     std::to_string(newBlueValue) + string("}"));
     if (!strcol.empty()) {
       rescol = (int)strtol(strcol.c_str(), nullptr, 10);
-      rescol = rescol / 257;
+      int redValue = rescol & 0xFF;
+      int greenValue = (rescol >> 8) & 0xFF;
+      int blueValue = (rescol >> 16) & 0xFF;
+      rescol = (redValue & 0xFF) + ((greenValue & 0xFF) << 8) + ((blueValue & 0xFF) << 16);
     }
     return rescol;
   }
