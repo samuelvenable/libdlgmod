@@ -1241,9 +1241,9 @@ int cocoa_get_color(int defcol, const char *title) {
     int newBlueValue = (int)((blueValue / 255) * 65535);
     string strcol = osascript(false, string(R"(osascript 2> /dev/null << 'EOF'
 set c to choose color )") + string("default color {") + std::to_string(newRedValue) + string(", ") + std::to_string(newGreenValue) + string(", ") + std::to_string(newBlueValue) + string(R"(}
-set r to item 1 of c div 257
-set g to item 2 of c div 257
-set b to item 3 of c div 257
+set r to item 1 of c
+set g to item 2 of c
+set b to item 3 of c
 return r & "," & g & "," & b
 EOF
 )"));
@@ -1252,9 +1252,9 @@ EOF
       std::vector<string> stringVec = string_split(strcol, ',');
       unsigned int index = 0;
       for (const string &str : stringVec) {
-        if (index == 0) r = (unsigned char)strtol(str.c_str(), nullptr, 10);
-        if (index == 1) g = (unsigned char)strtol(str.c_str(), nullptr, 10);
-        if (index == 2) b = (unsigned char)strtol(str.c_str(), nullptr, 10);
+        if (index == 0) r = (unsigned char)strtol(str.c_str(), nullptr, 10) / 257;
+        if (index == 1) g = (unsigned char)strtol(str.c_str(), nullptr, 10) / 257;
+        if (index == 2) b = (unsigned char)strtol(str.c_str(), nullptr, 10) / 257;
         index += 1;
       }
       return (int)(r | (g << 8) | (b << 16));
