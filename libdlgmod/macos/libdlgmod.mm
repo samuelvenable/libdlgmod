@@ -122,9 +122,9 @@ int cocoa_show_message(const char *str, bool has_cancel, const char *icon, const
   if (!owner || ![NSThread isMainThread]) {
     string butres;
     if (has_cancel) {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
-    } else {
       butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
+    } else {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
     }
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_OK))) {
       msgres = 1;
@@ -174,9 +174,9 @@ int cocoa_show_question(const char *str, bool has_cancel, const char *icon, cons
   if (!owner || ![NSThread isMainThread]) {
     string butres;
     if (has_cancel) {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
-    } else {
       butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
+    } else {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
     }
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_YES))) {
       qstres = 1;
