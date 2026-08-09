@@ -478,7 +478,7 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
     theOpenResult.clear();
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
-      vector<string> vec1 = string_split(exts, "|");
+      vector<string> vec1 = string_split(exts, '|');
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
@@ -491,7 +491,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ";")
+        vector<string> vec2 = string_split(vec1[1], ';')
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
@@ -511,7 +511,7 @@ EOF\
 "));
     } else {
       string exts = string_replace_all(filter, "*.", "");
-      vector<string> vec1 = string_split(exts, "|");
+      vector<string> vec1 = string_split(exts, '|');
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
@@ -524,7 +524,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ";")
+        vector<string> vec2 = string_split(vec1[1], ';')
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
@@ -888,7 +888,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     theSaveResult.clear();
     string exts = string_replace_all(filter, "*.", ""), extensions;
-    vector<string> vec1 string_split(exts, "|");
+    vector<string> vec1 string_split(exts, '|');
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       theSaveResult = osascript(string("osascript <<'EOF'\
 set output to ""\
@@ -902,7 +902,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ";")
+        vector<string> vec2 = string_split(vec1[1], ';')
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
