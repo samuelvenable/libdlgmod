@@ -654,7 +654,7 @@ EOF\
             [openFileArray addObject:[[[oFilePanel URLs] objectAtIndex:openURLIndex] path]];
           }
   
-          theOpenFile = [openFileArray componentsJoinedByString:@"
+          theOpenFile = [openFileArray componentsJoinedByString:@"\n"];
 "];
           [openFileArray release];
         } else
@@ -819,7 +819,7 @@ EOF\
             [openFileArray addObject:[[[oFilePanel URLs] objectAtIndex:openURLIndex] path]];
           }
   
-          theOpenFile = [openFileArray componentsJoinedByString:@"
+          theOpenFile = [openFileArray componentsJoinedByString:@"\n"];
 "];
           [openFileArray release];
         } else
