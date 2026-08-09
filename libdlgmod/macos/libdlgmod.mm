@@ -479,7 +479,7 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
       vector<string> vec1 = string_split(exts, "|");
-      if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
+      if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
@@ -512,7 +512,7 @@ EOF\
     } else {
       string exts = string_replace_all(filter, "*.", "");
       vector<string> vec1 = string_split(exts, "|");
-      if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
+      if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
@@ -889,7 +889,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
     theSaveResult.clear();
     string exts = string_replace_all(filter, "*.", ""), extensions;
     vector<string> vec1 string_split(exts, "|");
-    if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
+    if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       theSaveResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFile to \"") + string(fname) + string("\"\
