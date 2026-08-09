@@ -481,7 +481,7 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
       vector<string> vec1 = string_split(exts, '|');
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" with multiple selections allowed default location targetFolder\n\
 repeat with aFile in theFiles\n\
@@ -500,7 +500,7 @@ EOF\n\
           }
         }
         theOpenResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} with multiple selections allowed default location targetFolder\n\
 repeat with aFile in theFiles\n\
@@ -514,7 +514,7 @@ EOF\n\
         vector<string> vec1 = string_split(exts, '|');
         if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
           theOpenResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" default location targetFolder\n\
 repeat with aFile in theFiles\n\
@@ -533,7 +533,7 @@ EOF\n\
             }
           }
           theOpenResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} default location targetFolder\n\
 repeat with aFile in theFiles\n\
@@ -893,7 +893,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
     vector<string> vec1 = string_split(exts, '|');
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       theSaveResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFile to \"") + string(fname) + string("\"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" default name targetFile default location targetFolder\n\
@@ -913,7 +913,7 @@ EOF\n\
         }
       }
       theSaveResult = osascript(string("osascript <<'EOF'\n\
-set output to \"\"\n\
+set output to \" \"\n\
 set targetFile to \"") + string(fname) + string("\"\n\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\n\
 set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} default name targetFile default location targetFolder\n\
