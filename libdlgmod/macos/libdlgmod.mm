@@ -890,7 +890,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     theSaveResult.clear();
     string exts = string_replace_all(filter, "*.", ""), extensions;
-    vector<string> vec1 string_split(exts, '|');
+    vector<string> vec1 = string_split(exts, '|');
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       theSaveResult = osascript(string("osascript <<'EOF'\
 set output to ""\
