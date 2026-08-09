@@ -500,9 +500,9 @@ EOF
         vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
-            extensions += string("\"") vec2[i] + string("\", ");
+            extensions += string("\"") + vec2[i] + string("\", ");
           } else {
-            extensions += string("\"") vec2[i] + string("\"");
+            extensions += string("\"") + vec2[i] + string("\"");
           }
         }
         script = string(R"(osascript << 'EOF'
@@ -535,9 +535,9 @@ EOF
           vector<string> vec2 = string_split(vec1[1], ';');
           for (int i = 0; i < vec2.size(); i++) {
             if (i < vec2.size() - 1) {
-              extensions += string("\"") vec2[i] + string("\", ");
+              extensions += string("\"") + vec2[i] + string("\", ");
             } else {
-              extensions += string("\"") vec2[i] + string("\"");
+              extensions += string("\"") + vec2[i] + string("\"");
             }
           }
           script = string(R"(osascript << 'EOF'
@@ -921,9 +921,9 @@ EOF
       vector<string> vec2 = string_split(vec1[1], ';');
       for (int i = 0; i < vec2.size(); i++) {
         if (i < vec2.size() - 1) {
-          extensions += string("\"") vec2[i] + string("\", ");
+          extensions += string("\"") + vec2[i] + string("\", ");
         } else {
-          extensions += string("\"") vec2[i] + string("\"");
+          extensions += string("\"") + vec2[i] + string("\"");
         }
       }
       script = string(R"(osascript << 'EOF'
