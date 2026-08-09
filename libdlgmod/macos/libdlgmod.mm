@@ -482,8 +482,8 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         theOpenResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
-set theFiles to choose file with prompt \"") + string(title) + string("\" with multiple selections allowed default location targetFolder
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
+set theFiles to choose file with prompt \")") + string(title) + string(R"(\" with multiple selections allowed default location targetFolder
 repeat with aFile in theFiles\
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
@@ -501,8 +501,8 @@ EOF
         }
         theOpenResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
-set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} with multiple selections allowed default location targetFolder
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
+set theFiles to choose file with prompt \")") + string(title) + string(R"(\" of type {)") + extensions + string(R"(} with multiple selections allowed default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
@@ -515,7 +515,7 @@ EOF
         if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
           theOpenResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
 set theFiles to choose file with prompt \"") + string(title) + string("\" default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -534,8 +534,8 @@ EOF
           }
           theOpenResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
-set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} default location targetFolder
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
+set theFiles to choose file with prompt \"") + string(title) + string("\" of type {)") + extensions + string(R"(} default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
@@ -894,9 +894,9 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       theSaveResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFile to \"") + string(fname) + string("\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
-set theFiles to choose file with prompt \"") + string(title) + string("\" default name targetFile default location targetFolder
+set targetFile to \")") + string(fname) + string(R"(\"
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
+set theFiles to choose file with prompt \")") + string(title) + string(R"(\" default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
@@ -914,9 +914,9 @@ EOF
       }
       theSaveResult = osascript(string(R"(osascript <<'EOF'
 set output to \"\"
-set targetFile to \"") + string(fname) + string("\"
-set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias
-set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} default name targetFile default location targetFolder
+set targetFile to \")") + string(fname) + string(R"(\"
+set targetFolder to (POSIX file \")") + string(dir) + string(R"(\") as alias
+set theFiles to choose file with prompt \")") + string(title) + string(R"(\" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
