@@ -1240,7 +1240,7 @@ int cocoa_get_color(int defcol, const char *title) {
     int newGreenValue = (int)((greenValue / 255) * 65535);
     int newBlueValue = (int)((blueValue / 255) * 65535);
     string strcol = osascript(false, string(R"(osascript 2> /dev/null << 'EOF'
-set c to (choose color )") + string("default color {") + std::to_string(newRedValue) + string(", ") + std::to_string(newGreenValue) + string(", ") + std::to_string(newBlueValue) + string(R"(}
+set c to choose color )") + string("default color {") + std::to_string(newRedValue) + string(", ") + std::to_string(newGreenValue) + string(", ") + std::to_string(newBlueValue) + string(R"(}
 set r to item 1 of c div 257
 set g to item 2 of c div 257
 set b to item 3 of c div 257
