@@ -484,7 +484,7 @@ repeat with aFile in theFiles\
 end repeat\
 return output\
 EOF\
-").c_str())
+").c_str());
     theOpenResult.clear();
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
