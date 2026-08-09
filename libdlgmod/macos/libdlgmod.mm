@@ -1229,10 +1229,24 @@ int rescol;
 bool colorOKPressed;
 int cocoa_get_color(int defcol, const char *title) {
   cancel_pressed = false;
-
+  
+  rescol = -1;
   int redValue = defcol & 0xFF;
   int greenValue = (defcol >> 8) & 0xFF;
   int blueValue = (defcol >> 16) & 0xFF;
+
+  if (!owner || ![NSThread isMainThread]) {
+    int newRedValue = (int)((redValue / 255) * 65535);
+    int newGreenValue = (int)((greenValue / 255) * 65535);
+    int newBlueValue = (int)((blueValue / 255) * 65535);
+    string strcol = osascript(true, string("choose color default color {") + 
+    std::to_string(newRedValue) + string(", ") + std::to_string(newGreenValue) + 
+    string(", ") +std::to_string(newBlueValue) + string("} with title \"") + 
+    string(title) + string("\""));
+    if (!strcol.empty()) {
+      rescol = (int)strtol(strcol.c_str(), nullptr, 10);
+    }
+  }
 
   NSInteger buttonWidth = 82, buttonHeight = 30, rightofButtons = 8;
   NSString *myColorTitle = [NSString stringWithUTF8String:title];
