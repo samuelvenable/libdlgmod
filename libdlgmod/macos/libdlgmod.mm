@@ -491,7 +491,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ';')
+        vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
@@ -524,7 +524,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ';')
+        vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
@@ -902,7 +902,7 @@ return output\
 EOF\
 "));
       } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ';')
+        vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
             extensions += vec2[i] + string(", ");
