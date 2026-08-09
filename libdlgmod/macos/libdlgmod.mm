@@ -515,12 +515,13 @@ end repeat
 return output
 EOF
 )");
-        theOpenResult = osascript(false, script);
-      } else {
-        string exts = string_replace_all(filter, "*.", "");
-        vector<string> vec1 = string_split(exts, '|');
-        if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-          script = string(R"(osascript << 'EOF'
+      }
+      theOpenResult = osascript(false, script);
+    } else {
+      string exts = string_replace_all(filter, "*.", "");
+      vector<string> vec1 = string_split(exts, '|');
+      if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
+        script = string(R"(osascript << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
@@ -530,17 +531,17 @@ end repeat
 return output
 EOF
 )");
-          theOpenResult = osascript(false, script);
-        } else if (!vec1.empty() && vec1.size() >= 2) {
-          vector<string> vec2 = string_split(vec1[1], ';');
-          for (int i = 0; i < vec2.size(); i++) {
-            if (i < vec2.size() - 1) {
-              extensions += string("\"") + vec2[i] + string("\", ");
-            } else {
-              extensions += string("\"") + vec2[i] + string("\"");
-            }
+        theOpenResult = osascript(false, script);
+      } else if (!vec1.empty() && vec1.size() >= 2) {
+        vector<string> vec2 = string_split(vec1[1], ';');
+        for (int i = 0; i < vec2.size(); i++) {
+          if (i < vec2.size() - 1) {
+            extensions += string("\"") + vec2[i] + string("\", ");
+          } else {
+            extensions += string("\"") + vec2[i] + string("\"");
           }
-          script = string(R"(osascript << 'EOF'
+        }
+        script = string(R"(osascript << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
@@ -550,9 +551,8 @@ end repeat
 return output
 EOF
 )");
-          theOpenResult = osascript(false, script);
-        }
       }
+      theOpenResult = osascript(false, script);
     }
     printf("%s", script.c_str());
     return theOpenResult.c_str();
