@@ -478,11 +478,12 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
   cancel_pressed = false;
   if (!owner || ![NSThread isMainThread]) {
     string script;
+    string extensions;
     theOpenResult.clear();
     const char *home = getenv("HOME");
     string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
     if (mselect) {
-      string exts = string_replace_all(filter, "*.", ""), extensions;
+      string exts = string_replace_all(filter, "*.", "");
       vector<string> vec1 = string_split(exts, '|');
       if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
         script = string(R"(osascript << 'EOF'
@@ -899,10 +900,11 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   cancel_pressed = false;
   if (!owner || ![NSThread isMainThread]) {
     string script;
+    string extensions;
     theSaveResult.clear();
     const char *home = getenv("HOME");
     string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
-    string exts = string_replace_all(filter, "*.", ""), extensions;
+    string exts = string_replace_all(filter, "*.", "");
     vector<string> vec1 = string_split(exts, '|');
     if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
       script = string(R"(osascript << 'EOF'
