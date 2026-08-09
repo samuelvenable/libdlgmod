@@ -1247,7 +1247,6 @@ set b to item 3 of c div 257
 return r & "," & g & "," & b
 EOF
 )");
-    );
     if (!strcol.empty()) {
       int r = 0, g = 0, b = 0;
       std::vector<string> stringVec = string_split(strcol, ',');
