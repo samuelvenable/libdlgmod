@@ -909,7 +909,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set theFiles to choose file with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
+set theFiles to choose file name with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
@@ -930,7 +930,7 @@ EOF
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
+set theFiles to choose file name with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
