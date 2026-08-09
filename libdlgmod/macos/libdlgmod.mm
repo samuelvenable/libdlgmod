@@ -478,7 +478,7 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
     theOpenResult.clear();
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
-      vector<string> vec1 string_split(exts, "|");
+      vector<string> vec1 = string_split(exts, "|");
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
@@ -511,7 +511,7 @@ EOF\
 "));
     } else {
       string exts = string_replace_all(filter, "*.", "");
-      vector<string> vec1 string_split(exts, "|");
+      vector<string> vec1 = string_split(exts, "|");
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
