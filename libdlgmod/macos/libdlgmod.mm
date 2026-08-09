@@ -126,7 +126,7 @@ int cocoa_show_message(const char *str, bool has_cancel, const char *icon, const
     } else {
       butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
     }
-    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_OK))) {
+    if (butres == string(cocoa_widget_get_button_name(BUTTON_OK))) {
       msgres = 1;
     } else {
       msgres = -1;
@@ -178,9 +178,9 @@ int cocoa_show_question(const char *str, bool has_cancel, const char *icon, cons
     } else {
       butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
     }
-    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_YES))) {
+    if (butres == string(cocoa_widget_get_button_name(BUTTON_YES))) {
       qstres = 1;
-    } else if (!butres.compare(cocoa_widget_get_button_name(BUTTON_NO))) {
+    } else if (butres == string(cocoa_widget_get_button_name(BUTTON_NO))) {
       qstres = 0;
     } else {
       qstres = -1;
@@ -233,7 +233,7 @@ int cocoa_show_attempt(const char *str, const char *icon, const char *title) {
 
   if (!owner || ![NSThread isMainThread]) {
     string butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\""));
-    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_RETRY))) {
+    if (butres == string(cocoa_widget_get_button_name(BUTTON_RETRY))) {
       attemptres = 0;
     } else {
       attemptres = -1;
@@ -287,7 +287,7 @@ int cocoa_show_error(const char *str, bool _abort, const char *icon, const char 
     } else {
       butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
     }
-    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_ABORT))) {
+    if (butres == string(cocoa_widget_get_button_name(BUTTON_ABORT))) {
       exit(0);
     } else {
       errorres = -1;
