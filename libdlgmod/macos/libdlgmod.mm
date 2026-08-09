@@ -1242,7 +1242,7 @@ int cocoa_get_color(int defcol, const char *title) {
     string strcol = osascript(true, string("choose color ") +
     string("default color {") + std::to_string(newRedValue) + 
     string(", ") + std::to_string(newGreenValue) + string(", ") +
-    std::to_string(newBlueValue) + string("}");
+    std::to_string(newBlueValue) + string("}"));
     if (!strcol.empty()) {
       rescol = (int)strtol(strcol.c_str(), nullptr, 10);
     }
