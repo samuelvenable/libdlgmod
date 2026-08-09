@@ -479,7 +479,8 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     string script;
     theOpenResult.clear();
-    string location = ((!string(dir).empty()) ? dir : "$HOME");
+    const char *home = getenv("HOME");
+    string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
       vector<string> vec1 = string_split(exts, '|');
@@ -899,7 +900,8 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     string script;
     theSaveResult.clear();
-    string location = ((!string(dir).empty()) ? dir : "$HOME");
+    const char *home = getenv("HOME");
+    string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
     string exts = string_replace_all(filter, "*.", ""), extensions;
     vector<string> vec1 = string_split(exts, '|');
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
