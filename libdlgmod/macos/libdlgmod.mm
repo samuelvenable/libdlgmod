@@ -1244,14 +1244,12 @@ set c to (choose color )") + string("default color {") + std::to_string(newRedVa
 set r to item 1 of c div 257
 set g to item 2 of c div 257
 set b to item 3 of c div 257
-return "rgb(" & r & "," & g & "," & b & ")"
+return r & "," & g & "," & b
 EOF
 )");
     );
     if (!strcol.empty()) {
       int r = 0, g = 0, b = 0;
-      strcol = string_replace_all(strcol, "rgb(", "");
-      strcol = string_replace_all(strcol, ")", "");
       std::vector<string> stringVec = string_split(strcol, ',');
       unsigned int index = 0;
       for (const string &str : stringVec) {
