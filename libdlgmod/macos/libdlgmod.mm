@@ -1249,7 +1249,7 @@ int cocoa_get_color(int defcol, const char *title) {
       newGreenValue = (newCol >> 8) & 0xFF;
       newBlueValue = (newCol >> 16) & 0xFF;
       NSColor *resCol = [NSColor colorWithCalibratedRed:newRedValue green:newGreenValue blue:newBlueValue alpha:1.0f];
-      convertedColor = [resCol colorUsingType:NSColorTypeComponentBased];
+      NSColor *convertedColor = [resCol colorUsingType:NSColorTypeComponentBased];
       if (convertedColor) {
         CGFloat alpha = 1.0f;
         [convertedColor getRed:&newRedValue green:&newGreenValue blue:&newBlueValue alpha:&alpha];
