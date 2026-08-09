@@ -1244,20 +1244,11 @@ int cocoa_get_color(int defcol, const char *title) {
     string(", ") + std::to_string(newGreenValue) + string(", ") +
     std::to_string(newBlueValue) + string("}"));
     if (!strcol.empty()) {
-      int newCol = (int)strtol(strcol.c_str(), nullptr, 10);
-      int newRed = (int)(newCol / 65535);
-      int newGreen = ((int)(newCol / 65535) >> 8);
-      int newBlue = ((int)(newCol / 65535) >> 16);
-      NSColor *resCol = [NSColor colorWithCalibratedRed:newRed green:newGreen blue:newBlue alpha:1.0f];
-      NSColor *convertedColor = [resCol colorUsingType:NSColorTypeComponentBased];
-      if (convertedColor) {
-        CGFloat alpha = 1.0f;
-        [convertedColor getRed:&newRed green:&newGreen blue:&newBlue alpha:&alpha];
-        newRedValue = (int)(newRedValue * 255);
-        newGreenValue = (int)(newGreenValue * 255);
-        newBlueValue = (int)(newBlueValue * 255);
-        rescol = (newRedValue & 0xFF) + ((newGreenValue & 0xFF) << 8) + ((newBlueValue & 0xFF) << 16);
-      }
+      int defcol = (int)strtol(strcol.c_str(), nullptr, 10);
+      int redValue = defcol & 0xFF;
+      int greenValue = (defcol >> 8) & 0xFF;
+      int blueValue = (defcol >> 16) & 0xFF;
+      rescol = (redValue & 0xFF) + ((greenValue & 0xFF) << 8) + ((blueValue & 0xFF) << 16);
     }
     return rescol;
   }
