@@ -1246,6 +1246,7 @@ int cocoa_get_color(int defcol, const char *title) {
     if (!strcol.empty()) {
       rescol = (int)strtol(strcol.c_str(), nullptr, 10);
     }
+    return rescol;
   }
 
   NSInteger buttonWidth = 82, buttonHeight = 30, rightofButtons = 8;
