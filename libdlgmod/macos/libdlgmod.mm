@@ -509,11 +509,11 @@ end repeat\
 return output\
 EOF\
 "));
-    } else {
-      string exts = string_replace_all(filter, "*.", "");
-      vector<string> vec1 = string_split(exts, '|');
-      if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-        theOpenResult = osascript(string("osascript <<'EOF'\
+      } else {
+        string exts = string_replace_all(filter, "*.", "");
+        vector<string> vec1 = string_split(exts, '|');
+        if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
+          theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
 set theFiles to choose file with prompt \"") + string(title) + string("\" default location targetFolder\
@@ -523,16 +523,16 @@ end repeat\
 return output\
 EOF\
 "));
-      } else if (!vec1.empty() && vec1.size() >= 2) {
-        vector<string> vec2 = string_split(vec1[1], ';');
-        for (int i = 0; i < vec2.size(); i++) {
-          if (i < vec2.size() - 1) {
-            extensions += vec2[i] + string(", ");
-          } else {
-            extensions += vec2[i];
+        } else if (!vec1.empty() && vec1.size() >= 2) {
+          vector<string> vec2 = string_split(vec1[1], ';');
+          for (int i = 0; i < vec2.size(); i++) {
+            if (i < vec2.size() - 1) {
+              extensions += vec2[i] + string(", ");
+            } else {
+              extensions += vec2[i];
+            }
           }
-        }
-        theOpenResult = osascript(string("osascript <<'EOF'\
+          theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
 set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} default location targetFolder\
@@ -542,6 +542,7 @@ end repeat\
 return output\
 EOF\
 "));
+        }
       }
     }
     return theOpenResult.c_str();
