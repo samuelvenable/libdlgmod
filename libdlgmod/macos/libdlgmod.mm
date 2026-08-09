@@ -94,7 +94,7 @@ string osascript(bool type, string script) {
   ssize_t nRead = 0;
   FILE *fp = nullptr;
   if (type) fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
-  else fp = popen(string_replace_all(script, "\"", "\\\"") + string(" 2> /dev/null")).c_str(), "r");
+  else fp = popen(script + string(" 2> /dev/null")).c_str(), "r");
   if (fp) {
     while ((nRead = read(fileno(fp), buf, BUFSIZ)) > 0) {
       buf[nRead] = '\0';
