@@ -1256,9 +1256,9 @@ EOF
       std::vector<string> stringVec = string_split(strcol, ',');
       unsigned int index = 0;
       for (const string &str : stringVec) {
-        if (index == 0) r = strtod(str.c_str(), nullptr) / 257;
-        if (index == 1) g = strtod(str.c_str(), nullptr) / 257;
-        if (index == 2) b = strtod(str.c_str(), nullptr) / 257;
+        if (index == 0) r = strtod(str.c_str(), nullptr);
+        if (index == 1) g = strtod(str.c_str(), nullptr);
+        if (index == 2) b = strtod(str.c_str(), nullptr);
         index += 1;
       }
       return (int)(r | (g << 8) | (b << 16));
