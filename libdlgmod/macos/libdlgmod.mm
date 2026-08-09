@@ -94,7 +94,7 @@ string osascript(bool type, string script) {
   ssize_t nRead = 0;
   FILE *fp = nullptr;
   if (type) fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
-  else fp = popen((script + string(" 2> /dev/null")).c_str(), "r");
+  else fp = popen(script.c_str(), "r");
   if (fp) {
     while ((nRead = read(fileno(fp), buf, BUFSIZ)) > 0) {
       buf[nRead] = '\0';
@@ -486,7 +486,7 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
       string exts = string_replace_all(filter, "*.", "");
       vector<string> vec1 = string_split(exts, '|');
       if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-        script = string(R"(osascript << 'EOF'
+        script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" with multiple selections allowed default location targetFolder
@@ -506,7 +506,7 @@ EOF
             extensions += string("\"") + vec2[i] + string("\"");
           }
         }
-        script = string(R"(osascript << 'EOF'
+        script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} with multiple selections allowed default location targetFolder
@@ -522,7 +522,7 @@ EOF
       string exts = string_replace_all(filter, "*.", "");
       vector<string> vec1 = string_split(exts, '|');
       if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-        script = string(R"(osascript << 'EOF'
+        script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
@@ -542,7 +542,7 @@ EOF
             extensions += string("\"") + vec2[i] + string("\"");
           }
         }
-        script = string(R"(osascript << 'EOF'
+        script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
@@ -555,7 +555,6 @@ EOF
       }
       theOpenResult = osascript(false, script);
     }
-    printf("%s", script.c_str());
     return theOpenResult.c_str();
   }
 
@@ -907,7 +906,7 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
     string exts = string_replace_all(filter, "*.", "");
     vector<string> vec1 = string_split(exts, '|');
     if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-      script = string(R"(osascript << 'EOF'
+      script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
@@ -925,7 +924,7 @@ EOF
           extensions += string("\"") + vec2[i] + string("\"");
         }
       }
-      script = string(R"(osascript << 'EOF'
+      script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
@@ -935,7 +934,6 @@ EOF
 )");
       theSaveResult = osascript(false, script);
     }
-    printf("%s", script.c_str());
     return theSaveResult.c_str();
   }
 
