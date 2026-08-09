@@ -542,6 +542,7 @@ end repeat\
 return output\
 EOF\
 "));
+      }
     }
     return theOpenResult.c_str();
   }
