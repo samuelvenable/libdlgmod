@@ -28,6 +28,7 @@
 #include <cstring>
 #include <climits>
 #include <cstdio>
+#include <cctype>
 
 #include <sstream>
 #include <fstream>
@@ -68,6 +69,39 @@ int errorres;
 std::string strres;
 bool done;
 
+string string_replace_all(string str, string substr, string newstr) {
+  size_t pos = 0;
+  const size_t sublen = substr.length(), newlen = newstr.length();
+  while ((pos = str.find(substr, pos)) != string::npos) {
+    str.replace(pos, sublen, newstr);
+    pos += newlen;
+  }
+  return str;
+}
+
+string osascript(string script) {
+  string result;
+  char buf[BUFSIZ];
+  ssize_t nRead = 0;
+  FILE *fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
+  if (fp) {
+    while ((nRead = read(fileno(fp), buf, BUFSIZ)) > 0) {
+      buf[nRead] = '\0';
+      result.append(buf, nRead);
+    }
+    while (!result.empty() && (isspace(*result.rbegin()) || *result.rbegin() == '\a')) {
+      result.pop_back();
+    }
+    string substr = "button returned:";
+    size_t pos = result.find(substr);
+    if (pos != string::npos) {
+      result = result.substr(pos, substr.length());
+    }
+    pclose(fp);
+  }
+ return result;
+}
+
 const char *cocoa_widget_get_owner() {
   static string str;
   str = std::to_string((unsigned long long)owner);
@@ -84,6 +118,21 @@ const char *cocoa_widget_get_button_name(int type) {
 
 int cocoa_show_message(const char *str, bool has_cancel, const char *icon, const char *title) {
   cancel_pressed = false;
+
+  if (!owner || ![NSThread isMainThread]) {
+    string butres;
+    if (has_cancel) {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
+    } else {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
+    }
+    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_OK))) {
+      msgres = 1;
+    } else {
+      msgres = -1;
+    }
+    return msgres;
+  }
 
   NSString *myTitle = [NSString stringWithUTF8String:title];
   NSString *myStr = [NSString stringWithUTF8String:str];
@@ -121,6 +170,23 @@ int cocoa_show_message(const char *str, bool has_cancel, const char *icon, const
 
 int cocoa_show_question(const char *str, bool has_cancel, const char *icon, const char *title) {
   cancel_pressed = false;
+
+  if (!owner || ![NSThread isMainThread]) {
+    string butres;
+    if (has_cancel) {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
+    } else {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
+    }
+    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_YES))) {
+      qstres = 1;
+    } else if (!butres.compare(cocoa_widget_get_button_name(BUTTON_NO))) {
+      qstres = 0;
+    } else {
+      qstres = -1;
+    }
+    return qstres;
+  }
 
   NSString *myTitle = [NSString stringWithUTF8String:title];
   NSString *myStr = [NSString stringWithUTF8String:str];
@@ -165,6 +231,16 @@ int cocoa_show_question(const char *str, bool has_cancel, const char *icon, cons
 int cocoa_show_attempt(const char *str, const char *icon, const char *title) {
   cancel_pressed = false;
 
+  if (!owner || ![NSThread isMainThread]) {
+    string butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\""));
+    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_RETRY))) {
+      attemptres = 0;
+    } else {
+      attemptres = -1;
+    }
+    return attemptres;
+  }
+
   NSString *myStr = [NSString stringWithUTF8String:str];
   NSAlert *alert = [[NSAlert alloc] init];
   NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon]];
@@ -204,6 +280,21 @@ int cocoa_show_attempt(const char *str, const char *icon, const char *title) {
 int cocoa_show_error(const char *str, bool _abort, const char *icon, const char *title) {
   cancel_pressed = false;
 
+  if (!owner || ![NSThread isMainThread]) {
+    string butres;
+    if (!_abort) {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_IGNORE) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
+    } else {
+      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
+    }
+    if (!butres.compare(cocoa_widget_get_button_name(BUTTON_ABORT))) {
+      exit(0);
+    } else {
+      errorres = -1;
+    }
+    return errorres;
+  }
+
   NSString *myStr = [NSString stringWithUTF8String:str];
   NSAlert *alert = [[NSAlert alloc] init];
   NSImage *image = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithUTF8String:icon]];
@@ -241,6 +332,18 @@ int cocoa_show_error(const char *str, bool _abort, const char *icon, const char 
 
 const char *cocoa_input_box(const char *str, const char *def, const char *icon, const char *title, bool numbers) {
   cancel_pressed = false;
+
+  if (!owner || ![NSThread isMainThread]) {
+    strres = osascript(string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\")"));
+    if (!strres.empty()) {
+      cancel_pressed = false;
+      return strres.c_str();
+    } else {
+      strres.clear();
+      cancel_pressed = true;
+      return strres.c_str();
+    }
+  }
 
   NSString *myTitle = [NSString stringWithUTF8String:title];
   NSString *myStr = [NSString stringWithUTF8String:str];
@@ -293,6 +396,18 @@ const char *cocoa_input_box(const char *str, const char *def, const char *icon, 
 
 const char *cocoa_password_box(const char *str, const char *def, const char *icon, const char *title, bool numbers) {
   cancel_pressed = false;
+
+  if (!owner || ![NSThread isMainThread]) {
+    strres = osascript(string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\" with hidden answer)"));
+    if (!strres.empty()) {
+      cancel_pressed = false;
+      return strres.c_str();
+    } else {
+      strres.clear();
+      cancel_pressed = true;
+      return strres.c_str();
+    }
+  }
 
   NSString *myTitle = [NSString stringWithUTF8String:title];
   NSString *myStr = [NSString stringWithUTF8String:str];
