@@ -525,10 +525,7 @@ EOF
         script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set theFiles to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
-repeat with aFile in theFiles
-    set output to output & (POSIX path of aFile) & linefeed
-end repeat
+set output to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
 return output
 EOF
 )");
@@ -545,10 +542,7 @@ EOF
         script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
-repeat with aFile in theFiles
-    set output to output & (POSIX path of aFile) & linefeed
-end repeat
+set output to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
 return output
 EOF
 )");
