@@ -1244,7 +1244,7 @@ int cocoa_get_color(int defcol, const char *title) {
     string(", ") + std::to_string(newGreenValue) + string(", ") +
     std::to_string(newBlueValue) + string("}"));
     if (!strcol.empty()) {
-      int newCol = (int)strtol(strcol.c_str(), nullptr, 10);
+      CGFloat newCol = (CGFloat)strtof(strcol.c_str(), nullptr);
       CGFloat newRed = newCol & 0xFF;
       CGFloat newGreen = (newCol >> 8) & 0xFF;
       CGFloat newBlue = (newCol >> 16) & 0xFF;
