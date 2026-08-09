@@ -525,7 +525,8 @@ EOF
         script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set output to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
+set aFile to choose file with prompt ")") + string(title) + string(R"(" default location targetFolder
+set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
@@ -542,7 +543,8 @@ EOF
         script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set output to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
+set aFile to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default location targetFolder
+set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
@@ -904,7 +906,8 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set output to choose file name with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
+set aFile to choose file name with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
+set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
@@ -922,7 +925,8 @@ EOF
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set output to choose file name with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
+set aFile to choose file name with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
+set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
