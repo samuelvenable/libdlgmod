@@ -892,7 +892,6 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   cancel_pressed = false;
   if (!owner || ![NSThread isMainThread]) {
     string script;
-    string extensions;
     theSaveResult.clear();
     const char *home = getenv("HOME");
     string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
@@ -1193,6 +1192,23 @@ EOF
 std::string theFolderResult;
 const char *cocoa_get_directory(const char *capt, const char *root) {
   cancel_pressed = false;
+
+  if (!owner || ![NSThread isMainThread]) {
+    string script;
+    theFolderResult.clear();
+    const char *home = getenv("HOME");
+    string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
+    script = string(R"(osascript 2> /dev/null << 'EOF'
+set output to ""
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
+set aFile to choose folder with prompt ")") + string(title) + string(R"(" default location targetFolder
+set output to (POSIX path of aFile) & linefeed
+return output
+EOF
+)");
+    theFolderResult = osascript(false, script);
+    return theFolderResult.c_str();
+  }
 
   NSOpenPanel *dirPanel = [NSOpenPanel openPanel];
   [dirPanel setMessage:[NSString stringWithUTF8String:capt]];
