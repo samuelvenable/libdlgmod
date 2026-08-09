@@ -905,7 +905,6 @@ set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
-    }
     theSaveResult = osascript(false, script);
     return theSaveResult.c_str();
   }
