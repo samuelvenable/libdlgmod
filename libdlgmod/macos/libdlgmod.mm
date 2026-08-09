@@ -475,8 +475,9 @@ NSArray *openPatternItems;
 const char *cocoa_get_open_filename(const char *filter, const char *fname, const char *dir, const char *title, bool mselect) {
   cancel_pressed = false;
   if (!owner || ![NSThread isMainThread]) {
+    theOpenResult.clear();
     if (mselect) {
-      string exts = string_replace_all(filter, "*.", "");
+      string exts = string_replace_all(filter, "*.", ""), extensions;
       vector<string> vec1 string_split(exts, "|");
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
         theOpenResult = osascript(string("osascript <<'EOF'\
@@ -883,6 +884,46 @@ NSString *selectedSavePattern;
 NSArray *savePatternItems;
 int savePopIndex;
 const char *cocoa_get_save_filename(const char *filter, const char *fname, const char *dir, const char *title) {
+  cancel_pressed = false;
+  if (!owner || ![NSThread isMainThread]) {
+    theSaveResult.clear();
+    string exts = string_replace_all(filter, "*.", ""), extensions;
+    vector<string> vec1 string_split(exts, "|");
+    if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec[1] == "*")) {
+      theSaveResult = osascript(string("osascript <<'EOF'\
+set output to ""\
+set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
+set theFiles to choose file with prompt \"") + string(title) + string("\" default location targetFolder\
+repeat with aFile in theFiles\
+    set output to output & (POSIX path of aFile) & linefeed\
+end repeat\
+return output\
+EOF\
+"));
+      } else if (!vec1.empty() && vec1.size() >= 2) {
+        vector<string> vec2 = string_split(vec1[1], ";")
+        for (int i = 0; i < vec2.size(); i++) {
+          if (i < vec2.size() - 1) {
+            extensions += vec2[i] + string(", ");
+          } else {
+            extensions += vec2[i];
+          }
+        }
+        theSaveResult = osascript(string("osascript <<'EOF'\
+set output to ""\
+set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
+set theFiles to choose file with prompt \"") + string(title) + string("\" of type {" + extensions +"} default location targetFolder\
+repeat with aFile in theFiles\
+    set output to output & (POSIX path of aFile) & linefeed\
+end repeat\
+return output\
+EOF\
+"));
+      }
+    }
+    return theSaveResult;
+  }
+
   if (@available(macOS 11.0, *)) {
     cancel_pressed = false;
   
