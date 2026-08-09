@@ -1248,7 +1248,7 @@ int cocoa_get_color(int defcol, const char *title) {
       int redValue = defcol & 0xFF;
       int greenValue = (defcol >> 8) & 0xFF;
       int blueValue = (defcol >> 16) & 0xFF;
-      rescol = (redValue & 0xFF) + ((greenValue & 0xFF) << 8) + ((blueValue & 0xFF) << 16);
+      rescol = ((redValue / 257) & 0xFF) + (((greenValue / 257) & 0xFF) << 8) + (((blueValue / 257) & 0xFF) << 16);
     }
     return rescol;
   }
