@@ -930,7 +930,7 @@ EOF
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set theFiles to choose file name of type {)") + extensions + string(R"(} with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
+set theFiles to choose file name with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
 end repeat
