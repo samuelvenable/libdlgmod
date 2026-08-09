@@ -543,7 +543,7 @@ return output\
 EOF\
 "));
     }
-    return theOpenResult;
+    return theOpenResult.c_str();
   }
 
   if (@available(macOS 11.0, *)) {
@@ -923,7 +923,7 @@ EOF\
 "));
       }
     }
-    return theSaveResult;
+    return theSaveResult.c_str();
   }
 
   if (@available(macOS 11.0, *)) {
