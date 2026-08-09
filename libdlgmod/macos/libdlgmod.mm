@@ -502,7 +502,7 @@ EOF\
         theOpenResult = osascript(string("osascript <<'EOF'\
 set output to ""\
 set targetFolder to (POSIX file \"") + string(dir) + string("\") as alias\
-set theFiles to choose file with prompt \"") + string(title) + string("\" of type {" + extensions +"} with multiple selections allowed default location targetFolder\
+set theFiles to choose file with prompt \"") + string(title) + string("\" of type {") + extensions + string("} with multiple selections allowed default location targetFolder\
 repeat with aFile in theFiles\
     set output to output & (POSIX path of aFile) & linefeed\
 end repeat\
