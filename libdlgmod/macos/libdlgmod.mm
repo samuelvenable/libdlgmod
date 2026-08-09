@@ -896,32 +896,11 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
     theSaveResult.clear();
     const char *home = getenv("HOME");
     string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
-    string exts = string_replace_all(filter, "*.", "");
-    vector<string> vec1 = string_split(exts, '|');
-    if (string(filter).empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-      script = string(R"(osascript 2> /dev/null << 'EOF'
+    script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set aFile to choose file name with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
-set output to (POSIX path of aFile) & linefeed
-return output
-EOF
-)");
-    } else if (!string(filter).empty() && !vec1.empty() && vec1.size() >= 2 && vec1[1] != "*") {
-      vector<string> vec2 = string_split(vec1[1], ';');
-      for (int i = 0; i < vec2.size(); i++) {
-        if (i < vec2.size() - 1) {
-          extensions += string("\"") + vec2[i] + string("\", ");
-        } else {
-          extensions += string("\"") + vec2[i] + string("\"");
-        }
-      }
-      script = string(R"(osascript 2> /dev/null << 'EOF'
-set output to ""
-set targetFile to ")") + string(fname) + string(R"("
-set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set aFile to choose file name with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
 set output to (POSIX path of aFile) & linefeed
 return output
 EOF
