@@ -88,11 +88,13 @@ vector<string> string_split(string str, char delimiter) {
   return vec;
 }
 
-string osascript(string script) {
+string osascript(bool type, string script) {
   string result;
   char buf[BUFSIZ];
   ssize_t nRead = 0;
-  FILE *fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
+  FILE *fp = nullptr;
+  if (type) fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
+  else fp = popen(string_replace_all(script, "\"", "\\\"") + string(" 2> /dev/null")).c_str(), "r");
   if (fp) {
     while ((nRead = read(fileno(fp), buf, BUFSIZ)) > 0) {
       buf[nRead] = '\0';
@@ -131,9 +133,9 @@ int cocoa_show_message(const char *str, bool has_cancel, const char *icon, const
   if (!owner || ![NSThread isMainThread]) {
     string butres;
     if (has_cancel) {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
     } else {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_OK) + string("\""));
     }
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_OK))) {
       msgres = 1;
@@ -183,9 +185,9 @@ int cocoa_show_question(const char *str, bool has_cancel, const char *icon, cons
   if (!owner || ![NSThread isMainThread]) {
     string butres;
     if (has_cancel) {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
     } else {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" buttons {\"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_NO) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_YES) + string("\""));
     }
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_YES))) {
       qstres = 1;
@@ -241,7 +243,7 @@ int cocoa_show_attempt(const char *str, const char *icon, const char *title) {
   cancel_pressed = false;
 
   if (!owner || ![NSThread isMainThread]) {
-    string butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\""));
+    string butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_CANCEL) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_RETRY) + string("\""));
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_RETRY))) {
       attemptres = 0;
     } else {
@@ -292,9 +294,9 @@ int cocoa_show_error(const char *str, bool _abort, const char *icon, const char 
   if (!owner || ![NSThread isMainThread]) {
     string butres;
     if (!_abort) {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_IGNORE) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\", \"") + cocoa_widget_get_button_name(BUTTON_IGNORE) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
     } else {
-      butres = osascript(string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
+      butres = osascript(true, string("display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" with icon caution buttons {\"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\"} default button \"") + cocoa_widget_get_button_name(BUTTON_ABORT) + string("\""));
     }
     if (!butres.compare(cocoa_widget_get_button_name(BUTTON_ABORT))) {
       exit(0);
@@ -343,7 +345,7 @@ const char *cocoa_input_box(const char *str, const char *def, const char *icon, 
   cancel_pressed = false;
 
   if (!owner || ![NSThread isMainThread]) {
-    strres = osascript(string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\")"));
+    strres = osascript(true, string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\")"));
     if (!strres.empty()) {
       cancel_pressed = false;
       return strres.c_str();
@@ -407,7 +409,7 @@ const char *cocoa_password_box(const char *str, const char *def, const char *ico
   cancel_pressed = false;
 
   if (!owner || ![NSThread isMainThread]) {
-    strres = osascript(string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\" with hidden answer)"));
+    strres = osascript(true, string("text returned of (display dialog \"") + string(str) + string("\" with title \"") + string(title) + string("\" default answer \"") + string(def) + string("\" with hidden answer)"));
     if (!strres.empty()) {
       cancel_pressed = false;
       return strres.c_str();
@@ -477,13 +479,14 @@ const char *cocoa_get_open_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     string script;
     theOpenResult.clear();
+    string location = ((!string(dir).empty()) ? dir : "$HOME");
     if (mselect) {
       string exts = string_replace_all(filter, "*.", ""), extensions;
       vector<string> vec1 = string_split(exts, '|');
       if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-        script = string(R"(osascript <<'EOF'
+        script = string(R"(osascript << 'EOF'
 set output to ""
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" with multiple selections allowed default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -491,7 +494,7 @@ end repeat
 return output
 EOF
 )");
-        theOpenResult = osascript(script);
+        theOpenResult = osascript(false, script);
       } else if (!vec1.empty() && vec1.size() >= 2) {
         vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
@@ -501,9 +504,9 @@ EOF
             extensions += vec2[i];
           }
         }
-        script = string(R"(osascript <<'EOF'
+        script = string(R"(osascript << 'EOF'
 set output to ""
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} with multiple selections allowed default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -511,14 +514,14 @@ end repeat
 return output
 EOF
 )");
-        theOpenResult = osascript(script);
+        theOpenResult = osascript(false, script);
       } else {
         string exts = string_replace_all(filter, "*.", "");
         vector<string> vec1 = string_split(exts, '|');
         if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-          script = string(R"(osascript <<'EOF'
+          script = string(R"(osascript << 'EOF'
 set output to ""
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt "") + string(title) + string("" default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -526,7 +529,7 @@ end repeat
 return output
 EOF
 )");
-          theOpenResult = osascript(script);
+          theOpenResult = osascript(false, script);
         } else if (!vec1.empty() && vec1.size() >= 2) {
           vector<string> vec2 = string_split(vec1[1], ';');
           for (int i = 0; i < vec2.size(); i++) {
@@ -536,9 +539,9 @@ EOF
               extensions += vec2[i];
             }
           }
-          script = string(R"(osascript <<'EOF'
+          script = string(R"(osascript << 'EOF'
 set output to ""
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt "") + string(title) + string("" of type {)") + extensions + string(R"(} default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -546,7 +549,7 @@ end repeat
 return output
 EOF
 )");
-          theOpenResult = osascript(script);
+          theOpenResult = osascript(false, script);
         }
       }
     }
@@ -896,13 +899,14 @@ const char *cocoa_get_save_filename(const char *filter, const char *fname, const
   if (!owner || ![NSThread isMainThread]) {
     string script;
     theSaveResult.clear();
+    string location = ((!string(dir).empty()) ? dir : "$HOME");
     string exts = string_replace_all(filter, "*.", ""), extensions;
     vector<string> vec1 = string_split(exts, '|');
     if (exts.empty() || (!vec1.empty() && vec1.size() >= 2 && vec1[1] == "*")) {
-      script = string(R"(osascript <<'EOF'
+      script = string(R"(osascript << 'EOF'
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -910,7 +914,7 @@ end repeat
 return output
 EOF
 )");
-      theSaveResult = osascript(script);
+      theSaveResult = osascript(false, script);
     } else if (!vec1.empty() && vec1.size() >= 2) {
       vector<string> vec2 = string_split(vec1[1], ';');
       for (int i = 0; i < vec2.size(); i++) {
@@ -920,10 +924,10 @@ EOF
           extensions += vec2[i];
         }
       }
-      script = string(R"(osascript <<'EOF'
+      script = string(R"(osascript << 'EOF'
 set output to ""
 set targetFile to ")") + string(fname) + string(R"("
-set targetFolder to (POSIX file ")") + string(dir) + string(R"(") as alias
+set targetFolder to (POSIX file ")") + location + string(R"(") as alias
 set theFiles to choose file with prompt ")") + string(title) + string(R"(" of type {)") + extensions + string(R"(} default name targetFile default location targetFolder
 repeat with aFile in theFiles
     set output to output & (POSIX path of aFile) & linefeed
@@ -931,7 +935,7 @@ end repeat
 return output
 EOF
 )");
-      theSaveResult = osascript(script);
+      theSaveResult = osascript(false, script);
     }
     printf("%s", script.c_str());
     return theSaveResult.c_str();
