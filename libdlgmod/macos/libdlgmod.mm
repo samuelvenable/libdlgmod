@@ -496,8 +496,7 @@ end repeat
 return output
 EOF
 )");
-        theOpenResult = osascript(false, script);
-      } else if (!vec1.empty() && vec1.size() >= 2) {
+      } else if (!string(filter).empty() && !vec1.empty() && vec1.size() >= 2 && vec1[1] != "*") {
         vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
@@ -517,7 +516,6 @@ return output
 EOF
 )");
       }
-      theOpenResult = osascript(false, script);
     } else {
       string exts = string_replace_all(filter, "*.", "");
       vector<string> vec1 = string_split(exts, '|');
@@ -530,8 +528,7 @@ set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
-        theOpenResult = osascript(false, script);
-      } else if (!vec1.empty() && vec1.size() >= 2) {
+      } else if (!string(filter).empty() && !vec1.empty() && vec1.size() >= 2 && vec1[1] != "*") {
         vector<string> vec2 = string_split(vec1[1], ';');
         for (int i = 0; i < vec2.size(); i++) {
           if (i < vec2.size() - 1) {
@@ -549,8 +546,8 @@ return output
 EOF
 )");
       }
-      theOpenResult = osascript(false, script);
     }
+    theOpenResult = osascript(false, script);
     return theOpenResult.c_str();
   }
 
@@ -911,8 +908,7 @@ set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
-      theSaveResult = osascript(false, script);
-    } else if (!vec1.empty() && vec1.size() >= 2) {
+    } else if (!string(filter).empty() && !vec1.empty() && vec1.size() >= 2 && vec1[1] != "*") {
       vector<string> vec2 = string_split(vec1[1], ';');
       for (int i = 0; i < vec2.size(); i++) {
         if (i < vec2.size() - 1) {
@@ -930,8 +926,8 @@ set output to (POSIX path of aFile) & linefeed
 return output
 EOF
 )");
-      theSaveResult = osascript(false, script);
     }
+    theSaveResult = osascript(false, script);
     return theSaveResult.c_str();
   }
 
