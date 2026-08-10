@@ -29,7 +29,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{3701BCC9-BA20-4EF1-B3A1-0F6735A7E0AB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>libdlgmod</RootNamespace>
+    <RootNamespace>libdlgmod-cc</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
