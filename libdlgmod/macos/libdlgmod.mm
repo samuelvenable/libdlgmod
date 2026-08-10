@@ -104,12 +104,21 @@ string osascript(bool type, string script) {
   if (type) fp = popen((string("osascript -e \"") + string_replace_all(script, "\"", "\\\"") + string("\" 2> /dev/null")).c_str(), "r");
   else fp = popen(script.c_str(), "r");
   if (fp) {
+    #if (defined(USE_SDL_POLLEVENT) || defined(USE_SDL2_POLLEVENT) || defined(USE_SDL3_POLLEVENT))
+    SDL_Event event;
+    #endif
     while ((nRead = read(fileno(fp), buf, BUFSIZ)) > 0) {
       buf[nRead] = '\0';
       result.append(buf, nRead);
+      #if (defined(USE_SDL_POLLEVENT) || defined(USE_SDL2_POLLEVENT) || defined(USE_SDL3_POLLEVENT))
+      while (SDL_PollEvent(&event) > 0);
+      #endif
     }
     while (!result.empty() && (isspace(*result.rbegin()) || *result.rbegin() == '\a')) {
       result.pop_back();
+      #if (defined(USE_SDL_POLLEVENT) || defined(USE_SDL2_POLLEVENT) || defined(USE_SDL3_POLLEVENT))
+      while (SDL_PollEvent(&event) > 0);
+      #endif
     }
     string substr = "button returned:";
     size_t pos = result.find(substr);
