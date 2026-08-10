@@ -24,12 +24,12 @@
 
 */
 
-#ifdef _WIN32 /* Windows */
+#if !defined(DIALOG_MODULE_GAME_MAKER_BUILD)
+#if defined(_WIN32) /* Windows */
 #define EXPORTED_FUNCTION extern "C" __declspec(dllexport)
 #else /* macOS, Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, illumos */
 #define EXPORTED_FUNCTION extern "C" __attribute__((visibility("default")))
 #endif
-
 EXPORTED_FUNCTION int show_message(const char *str);
 EXPORTED_FUNCTION int show_message_cancelable(const char *str);
 EXPORTED_FUNCTION int show_question(const char *str);
@@ -61,6 +61,7 @@ EXPORTED_FUNCTION void widget_set_system(const char *sys);
 EXPORTED_FUNCTION void widget_set_button_name(int type, const char *name);
 EXPORTED_FUNCTION const char *widget_get_button_name(int type);
 EXPORTED_FUNCTION bool widget_get_canceled();
+#endif
 
 namespace dialog_module {
 
@@ -98,6 +99,7 @@ namespace dialog_module {
   
 } // namespace dialog_module
 
+#if !defined(DIALOG_MODULE_GAME_MAKER_BUILD)
 inline int show_message(const char *str) {
   return dialog_module::show_message(str);
 }
@@ -221,3 +223,4 @@ inline void widget_set_button_name(int type, const char *name) {
 inline bool widget_get_canceled() {
   return dialog_module::widget_get_canceled();
 }
+#endif
