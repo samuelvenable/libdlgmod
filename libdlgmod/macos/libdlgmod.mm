@@ -62,12 +62,12 @@ string btn_array[btn_array_len] = { "Abort", "Ignore", "OK", "Cancel", "Yes", "N
 
 void *owner = nullptr;
 bool cancel_pressed = false;
+string system = "Cocoa";
 int msgres;
 int qstres;
 int attemptres;
 int errorres;
 string strres;
-string system;
 bool done;
 
 string string_replace_all(string str, string substr, string newstr) {
