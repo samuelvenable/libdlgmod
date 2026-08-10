@@ -1197,11 +1197,11 @@ const char *cocoa_get_directory(const char *capt, const char *root) {
     string script;
     theFolderResult.clear();
     const char *home = getenv("HOME");
-    string location = ((!string(dir).empty()) ? dir : ((home) ? home : "/"));
+    string location = ((!string(root).empty()) ? root : ((home) ? home : "/"));
     script = string(R"(osascript 2> /dev/null << 'EOF'
 set output to ""
 set targetFolder to (POSIX file ")") + location + string(R"(") as alias
-set aFile to choose folder with prompt ")") + string(title) + string(R"(" default location targetFolder
+set aFile to choose folder with prompt ")") + string(capt) + string(R"(" default location targetFolder
 set output to (POSIX path of aFile) & linefeed
 return output
 EOF
