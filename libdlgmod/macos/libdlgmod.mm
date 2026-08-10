@@ -44,6 +44,13 @@
 #include <AppKit/AppKit.h>
 #include <UniformTypeIdentifiers/UTType.h>
 
+#if (defined(USE_SDL_POLLEVENT) || defined(USE_SDL2_POLLEVENT))
+#include <SDL.h>
+#endif
+#if defined(USE_SDL3_POLLEVENT)
+#include <SDL3/SDL.h>
+#endif
+
 using std::string;
 using std::vector;
 
