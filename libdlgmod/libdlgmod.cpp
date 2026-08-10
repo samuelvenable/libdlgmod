@@ -24,11 +24,10 @@
  
 */
 
+#if defined(DIALOG_MODULE_GAME_MAKER_BUILD)
 #include <string>
-
 #include <libdlgmod/libdlgmod.h>
-
-#ifdef _WIN32 /* Windows */
+#if defined(_WIN32) /* Windows */
 #define EXPORTED_FUNCTION extern "C" __declspec(dllexport)
 #else /* macOS, Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, illumos */
 #define EXPORTED_FUNCTION extern "C" __attribute__((visibility("default")))
@@ -672,3 +671,4 @@ void RegisterCallbacks(char *arg1, char *arg2, char *arg3, char *arg4) {
   DsMapAddDouble = DsMapAddDoublePtr;
   DsMapAddString = DsMapAddStringPtr;
 }
+#endif
