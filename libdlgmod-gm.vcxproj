@@ -18,8 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>    <ClCompile Include="libdlgmod\libdlgmod.cpp" />
-    <ClCompile Include="libdlgmod\general\libdlgmod.cpp" />
+  <ItemGroup>
+    <ClCompile Include="libdlgmod\libdlgmod.cpp" />
+    <ClCompile Include="libdlgmod\\libdlgmod.cpp" />
     <ClCompile Include="libdlgmod\win32\libdlgmod.cpp" />
   </ItemGroup>
   <ItemGroup>
