@@ -262,7 +262,7 @@ namespace {
     return nullptr;
   }
 
-  HANDLE open_process_with_debug_privilege(proc_id_info::proc_id_t proc_id) {
+  HANDLE open_process_with_debug_privilege(apiprocess::proc_id_t proc_id) {
     HANDLE proc = nullptr;
     HANDLE token = nullptr;
     LUID luid;
@@ -321,7 +321,7 @@ namespace {
     MEMENV
   };
 
-  std::vector<std::string> cmd_env_from_proc_id(proc_id_info::proc_id_t proc_id, int type) {
+  std::vector<std::string> cmd_env_from_proc_id(apiprocess::proc_id_t proc_id, int type) {
     std::vector<std::string> vec;
     std::size_t len = 0;
     int argmax = 0, nargs = 0;
@@ -381,12 +381,12 @@ namespace {
     MEMENV
   };
 
-  std::vector<std::string> cmd_env_from_proc_id(proc_id_info::proc_id_t proc_id, int type) {
+  std::vector<std::string> cmd_env_from_proc_id(apiprocess::proc_id_t proc_id, int type) {
     std::vector<std::string> vec;
-    auto proc_psinfo_get = [](psinfo_t *psinfo, proc_id_info::proc_id_t proc_id) {
+    auto proc_psinfo_get = [](psinfo_t *psinfo, apiprocess::proc_id_t proc_id) {
       int fd = -1, retval = 0;
       std::string procfs_path;
-      if (proc_id == proc_id_info::proc_id_from_self()) {
+      if (proc_id == apiprocess::proc_id_from_self()) {
         procfs_path = "/proc/self/psinfo";
       } else {
         procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/psinfo");
@@ -415,7 +415,7 @@ namespace {
       goto finish;
     }
     args_size = sizeof(*args) * ARG_MAX;
-    if (proc_id == proc_id_info::proc_id_from_self()) {
+    if (proc_id == apiprocess::proc_id_from_self()) {
       procfs_path = "/proc/self/as";
     } else {
       procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/as");
@@ -460,7 +460,7 @@ namespace {
   }
   #endif
 
-  bool proc_id_is_kernel_thread(proc_id_info::proc_id_t proc_id) {
+  bool proc_id_is_kernel_thread(apiprocess::proc_id_t proc_id) {
     bool retval = false;
     #if (defined(_WIN32) || defined(_WIN64))
     HANDLE hp = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -485,7 +485,7 @@ namespace {
     }
     #elif (defined(__linux__) || defined(__ANDROID__))
     std::string procfs_path;
-    if (proc_id == proc_id_info::proc_id_from_self()) {
+    if (proc_id == apiprocess::proc_id_from_self()) {
       procfs_path = "/proc/self/stat";
     } else {
       procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/stat");
@@ -558,10 +558,10 @@ namespace {
     }
     kvm_close(kd);
     #elif (defined(__sun) && defined(__SVR4))
-    auto proc_pstatus_get = [](pstatus_t *pstatus, proc_id_info::proc_id_t proc_id) {
+    auto proc_pstatus_get = [](pstatus_t *pstatus, apiprocess::proc_id_t proc_id) {
       int fd = -1, retval = -1;
       std::string procfs_path;
-      if (proc_id == proc_id_info::proc_id_from_self()) {
+      if (proc_id == apiprocess::proc_id_from_self()) {
         procfs_path = "/proc/self/status";
       } else {
         procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/status");
@@ -593,7 +593,7 @@ namespace {
     return retval;
   }
 
-  bool proc_id_and_parent_proc_id_compare_creation_time(proc_id_info::proc_id_t proc_id, proc_id_info::proc_id_t parent_proc_id) {
+  bool proc_id_and_parent_proc_id_compare_creation_time(apiprocess::proc_id_t proc_id, apiprocess::proc_id_t parent_proc_id) {
     #if (defined(_WIN32) || defined(_WIN64))
     HANDLE proc_handle = nullptr, parent_proc_handle = nullptr;
     if ((proc_handle = open_process_with_debug_privilege(proc_id))) {
@@ -638,10 +638,10 @@ namespace {
       }
       return retval;
     };
-    auto proc_id_get_clock_ticks = [](proc_id_info::proc_id_t proc_id) {
+    auto proc_id_get_clock_ticks = [](apiprocess::proc_id_t proc_id) {
       long long retval = 0;
       std::string procfs_path;
-      if (proc_id == proc_id_info::proc_id_from_self()) {
+      if (proc_id == apiprocess::proc_id_from_self()) {
         procfs_path = "/proc/self/stat";
       } else {
         procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/stat");
@@ -778,10 +778,10 @@ namespace {
     #elif (defined(__sun) && defined(__SVR4))
     time_t child_sec = 0, parent_sec = 0;
     long child_nsec = 0, parent_nsec = 0;
-    auto proc_psinfo_get = [](psinfo_t *psinfo, proc_id_info::proc_id_t proc_id) {
+    auto proc_psinfo_get = [](psinfo_t *psinfo, apiprocess::proc_id_t proc_id) {
       int fd = -1, retval = -1;
       std::string procfs_path;
-      if (proc_id == proc_id_info::proc_id_from_self()) {
+      if (proc_id == apiprocess::proc_id_from_self()) {
         procfs_path = "/proc/self/psinfo";
       } else {
         procfs_path = std::string("/proc/") + std::to_string(proc_id) + std::string("/psinfo");
@@ -1014,7 +1014,7 @@ namespace {
 
 } // anonymous namespace
 
-namespace proc_id_info {
+namespace apiprocess {
 
   proc_id_t proc_id_from_self() {
     #if (!defined(_WIN32) && !defined(_WIN64))
