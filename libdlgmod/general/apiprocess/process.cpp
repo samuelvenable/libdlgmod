@@ -579,6 +579,7 @@ namespace {
       retval = ((pstatus.pr_flags & PR_ISSYS) || pstatus.pr_pid == 0);
       return retval;
     }
+    struct pid cur_pid;
     kvm_t *kd = nullptr;
     struct proc *proc_info = nullptr;
     kd = kvm_open(nullptr, nullptr, nullptr, O_RDONLY, nullptr);
@@ -1373,6 +1374,7 @@ namespace apiprocess {
       }
       close(fd);
     }
+    struct pid cur_pid;
     kvm_t *kd = nullptr;
     struct proc *proc_info = nullptr;
     if (!vec.empty()) { 
@@ -2222,6 +2224,7 @@ namespace apiprocess {
         close(fd);
       }
     }
+    struct pid cur_pid;
     kvm_t *kd = nullptr;
     struct proc *proc_info = nullptr;
     struct user *proc_user = nullptr;
