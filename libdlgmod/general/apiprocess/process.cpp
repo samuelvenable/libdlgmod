@@ -914,7 +914,7 @@ namespace {
   #if (!defined(_WIN32) && !defined(_WIN64))
   apiprocess::proc_id_t proc_id_from_fork_proc_id(apiprocess::proc_id_t proc_id) {
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    std::vector<apiprocess::proc_id_t> ppid = proc_id_from_parent_proc_id(proc_id);
+    std::vector<apiprocess::proc_id_t> ppid = apiprocess::proc_id_from_parent_proc_id(proc_id);
     if (!ppid.empty()) proc_id = ppid[0];
     return proc_id;
   }
@@ -932,7 +932,7 @@ namespace {
       while ((proc_id = proc_id_from_fork_proc_id(proc_id)) == wait_proc_id) {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         int status = 0; wait_proc_id = waitpid(fork_proc_id, &status, WNOHANG);
-        std::string exe = exe_from_proc_id(fork_proc_id);
+        std::string exe = apiprocess::exe_from_proc_id(fork_proc_id);
         if (exe.empty()) {
           break;
         }
