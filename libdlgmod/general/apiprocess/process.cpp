@@ -834,7 +834,7 @@ namespace {
   std::mutex complete_mutex;
   std::mutex stdopt_mutex;
   long long optlmt = 0;
-  int index = -1;
+  int ind = -1;
 
   #if (!defined(_WIN32) && !defined(_WIN64))
   apiprocess::proc_id_t process_execute_helper(const char *command, int *infp, int *outfp) {
@@ -921,7 +921,7 @@ namespace {
   #endif
 
   apiprocess::proc_id_t spawn_child_proc_id_helper(std::string command) {
-    index++;
+    ind++;
     #if (!defined(_WIN32) && !defined(_WIN64))
     int infd = 0, outfd = 0;
     apiprocess::proc_id_t proc_id = 0, fork_proc_id = 0, wait_proc_id = 0;
@@ -954,8 +954,8 @@ namespace {
         }
       }
     }
-    child_proc_id[index] = proc_id; std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    proc_did_execute[index] = true; apiprocess::proc_id_t proc_index = proc_id;
+    child_proc_id[ind] = proc_id; std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    proc_did_execute[ind] = true; apiprocess::proc_id_t proc_index = proc_id;
     stdipt_map[proc_index] = (std::intptr_t)infd;
     std::thread opt_thread(output_thread, (std::intptr_t)outfd, proc_index);
     opt_thread.join();
@@ -988,8 +988,8 @@ namespace {
     if (success) {
       CloseHandle(stdout_write);
       CloseHandle(stdin_read);
-      apiprocess::proc_id_t proc_id = pi.dwProcessId; child_proc_id[index] = proc_id; proc_index = proc_id;
-      std::this_thread::sleep_for(std::chrono::milliseconds(5)); proc_did_execute[index] = true;
+      apiprocess::proc_id_t proc_id = pi.dwProcessId; child_proc_id[ind] = proc_id; proc_index = proc_id;
+      std::this_thread::sleep_for(std::chrono::milliseconds(5)); proc_did_execute[ind] = true;
       stdipt_map[proc_index] = (std::intptr_t)(void *)stdin_write;
       HANDLE wait_handles[] = { pi.hProcess, stdout_read };
       std::thread opt_thread(output_thread, (std::intptr_t)(void *)stdout_read, proc_index);
@@ -1002,7 +1002,7 @@ namespace {
       CloseHandle(stdout_read);
       CloseHandle(stdin_write);
     } else {
-      proc_did_execute[index] = true;
+      proc_did_execute[ind] = true;
       child_proc_id[index] = 0;
     }
     #endif
@@ -2537,17 +2537,17 @@ namespace apiprocess {
   proc_id_t spawn_child_proc_id(std::string command, bool wait) {
     #if (defined(USE_SDL_POLLEVENT) || defined(USE_SDL2_POLLEVENT) || defined(USE_SDL3_POLLEVENT))
     if (wait) {
-      int prevIndex = index;
+      int prevIndex = ind;
       std::thread proc_thread(spawn_child_proc_id_helper, command);
-      while (prevIndex == index) {
+      while (prevIndex == ind) {
         message_pump();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
       }
-      while (proc_did_execute.find(index) == proc_did_execute.end() || !proc_did_execute[index]) {
+      while (proc_did_execute.find(ind) == proc_did_execute.end() || !proc_did_execute[ind]) {
         message_pump();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
       }
-      proc_id_t proc_index = child_proc_id[index];
+      proc_id_t proc_index = child_proc_id[ind];
       SDL_Event event;
       while (true) {
         std::lock_guard<std::mutex> guard(complete_mutex);
@@ -2560,17 +2560,17 @@ namespace apiprocess {
     #else
     if (wait) return spawn_child_proc_id_helper(command);
     #endif
-    int prevIndex = index;
+    int prevIndex = ind;
     std::thread proc_thread(spawn_child_proc_id_helper, command);
-    while (prevIndex == index) {
+    while (prevIndex == ind) {
       message_pump();
       std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
-    while (proc_did_execute.find(index) == proc_did_execute.end() || !proc_did_execute[index]) {
+    while (proc_did_execute.find(ind) == proc_did_execute.end() || !proc_did_execute[ind]) {
       message_pump();
       std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
-    proc_id_t proc_index = child_proc_id[index];
+    proc_id_t proc_index = child_proc_id[ind];
     std::lock_guard<std::mutex> guard(complete_mutex);
     complete_map[proc_index] = false;
     proc_thread.detach();
