@@ -54,6 +54,7 @@ elif [ `uname` = "DragonFly" ]; then
   g++ -c "libdlgmod/general/apiprocess/process.cpp" -o "libdlgmod/general/apiprocess/process.o" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DDIALOG_MODULE_GAME_MAKER_BUILD -Ilibdlgmod/general -I. -I/usr/local/include -std=c++17 -fPIC;
   g++ -c "libdlgmod/general/xprocess.cpp" -o "libdlgmod/general/xprocess.o" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DDIALOG_MODULE_GAME_MAKER_BUILD -Ilibdlgmod/general -I. -I/usr/local/include -std=c++17 -fPIC;
   g++ -c "libdlgmod/general/lodepng.cpp" -o "libdlgmod/general/lodepng.o" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DDIALOG_MODULE_GAME_MAKER_BUILD -Ilibdlgmod/general -I. -I/usr/local/include -std=c++17 -fPIC;
+  g++ -c "libdlgmod/libdlgmod.cpp" -o "libdlgmod/libdlgmod.o" -DPROCESS_GUIWINDOW_IMPL -DNULLIFY_STDERR -DDIALOG_MODULE_GAME_MAKER_BUILD -Ilibdlgmod/general -I. -I/usr/local/include -std=c++17 -fPIC;
   ar rc "libdlgmod-gm.a" "libdlgmod/libdlgmod.o" "libdlgmod/xlib/libdlgmod.o" "libdlgmod/general/apiprocess/process.o" "libdlgmod/general/xprocess.o" "libdlgmod/general/lodepng.o";
   rm -rf "libdlgmod/libdlgmod.o" "libdlgmod/xlib/libdlgmod.o" "libdlgmod/general/apiprocess/process.o" "libdlgmod/general/xprocess.o" "libdlgmod/general/lodepng.o";
 elif [ `uname` = "NetBSD" ]; then
