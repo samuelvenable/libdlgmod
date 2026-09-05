@@ -826,10 +826,10 @@ namespace {
     return false;
   }
 
-  std::unordered_map<proc_id_t, std::intptr_t> stdipt_map;
-  std::unordered_map<proc_id_t, std::string> stdopt_map;
-  std::unordered_map<proc_id_t, bool> complete_map;
-  std::unordered_map<int, proc_id_t> child_proc_id;
+  std::unordered_map<apiprocess::proc_id_t, std::intptr_t> stdipt_map;
+  std::unordered_map<apiprocess::proc_id_t, std::string> stdopt_map;
+  std::unordered_map<apiprocess::proc_id_t, bool> complete_map;
+  std::unordered_map<int, apiprocess::proc_id_t> child_proc_id;
   std::unordered_map<int, bool> proc_did_execute;
   std::mutex complete_mutex;
   std::mutex stdopt_mutex;
@@ -837,10 +837,10 @@ namespace {
   int index = -1;
 
   #if (!defined(_WIN32) && !defined(_WIN64))
-  proc_id_t process_execute_helper(const char *command, int *infp, int *outfp) {
+  apiprocess::proc_id_t process_execute_helper(const char *command, int *infp, int *outfp) {
     int p_stdin[2];
     int p_stdout[2];
-    proc_id_t pid = -1;
+    apiprocess::proc_id_t pid = -1;
     if (pipe(p_stdin) == -1)
       return -1;
     if (pipe(p_stdout) == -1) {
@@ -891,7 +891,7 @@ namespace {
   }
   #endif
 
-  void output_thread(std::intptr_t file, proc_id_t proc_index) {
+  void output_thread(std::intptr_t file, apiprocess::proc_id_t proc_index) {
     #if (!defined(_WIN32) && !defined(_WIN64))
     ssize_t nRead = 0; char buffer[BUFSIZ];
     while ((nRead = read((int)file, buffer, BUFSIZ)) > 0) {
@@ -912,19 +912,19 @@ namespace {
   }
 
   #if (!defined(_WIN32) && !defined(_WIN64))
-  proc_id_t proc_id_from_fork_proc_id(proc_id_t proc_id) {
+  apiprocess::proc_id_t proc_id_from_fork_proc_id(apiprocess::proc_id_t proc_id) {
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    std::vector<proc_id_t> ppid = proc_id_from_parent_proc_id(proc_id);
+    std::vector<apiprocess::proc_id_t> ppid = proc_id_from_parent_proc_id(proc_id);
     if (!ppid.empty()) proc_id = ppid[0];
     return proc_id;
   }
   #endif
 
-  proc_id_t spawn_child_proc_id_helper(std::string command) {
+  apiprocess::proc_id_t spawn_child_proc_id_helper(std::string command) {
     index++;
     #if (!defined(_WIN32) && !defined(_WIN64))
     int infd = 0, outfd = 0;
-    proc_id_t proc_id = 0, fork_proc_id = 0, wait_proc_id = 0;
+    apiprocess::proc_id_t proc_id = 0, fork_proc_id = 0, wait_proc_id = 0;
     fork_proc_id = process_execute_helper(command.c_str(), &infd, &outfd);
     proc_id = fork_proc_id; wait_proc_id = proc_id;
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -955,7 +955,7 @@ namespace {
       }
     }
     child_proc_id[index] = proc_id; std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    proc_did_execute[index] = true; proc_id_t proc_index = proc_id;
+    proc_did_execute[index] = true; apiprocess::proc_id_t proc_index = proc_id;
     stdipt_map[proc_index] = (std::intptr_t)infd;
     std::thread opt_thread(output_thread, (std::intptr_t)outfd, proc_index);
     opt_thread.join();
@@ -982,13 +982,13 @@ namespace {
     #endif
     si.hStdOutput = stdout_write;
     si.hStdInput = stdin_read;
-    PROCESS_INFORMATION pi; ZeroMemory(&pi, sizeof(pi)); proc_id_t proc_index = 0;
+    PROCESS_INFORMATION pi; ZeroMemory(&pi, sizeof(pi)); apiprocess::proc_id_t proc_index = 0;
     BOOL success = CreateProcessW(nullptr, cwstr_command, nullptr, nullptr, true, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
     delete[] cwstr_command;
     if (success) {
       CloseHandle(stdout_write);
       CloseHandle(stdin_read);
-      proc_id_t proc_id = pi.dwProcessId; child_proc_id[index] = proc_id; proc_index = proc_id;
+      apiprocess::proc_id_t proc_id = pi.dwProcessId; child_proc_id[index] = proc_id; proc_index = proc_id;
       std::this_thread::sleep_for(std::chrono::milliseconds(5)); proc_did_execute[index] = true;
       stdipt_map[proc_index] = (std::intptr_t)(void *)stdin_write;
       HANDLE wait_handles[] = { pi.hProcess, stdout_read };
