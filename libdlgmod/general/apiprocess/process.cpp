@@ -1003,7 +1003,7 @@ namespace {
       CloseHandle(stdin_write);
     } else {
       proc_did_execute[ind] = true;
-      child_proc_id[index] = 0;
+      child_proc_id[ind] = 0;
     }
     #endif
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
