@@ -44,7 +44,7 @@ SOFTWARE.
 #include <libdlgmod/general/lodepng.h>
 #include <xprocess.hpp>
 #if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
-#include <nfd.hpp>
+#include <nfd.h>
 #endif
 
 #include <sys/types.h>
