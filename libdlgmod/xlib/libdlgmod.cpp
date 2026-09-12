@@ -43,7 +43,7 @@
 #include <libdlgmod/libdlgmod.h>
 #include <libdlgmod/general/lodepng.h>
 #include <xprocess.hpp>
-#if ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__)))
+#if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
 #include <nfd.hpp>
 #endif
 
@@ -289,7 +289,7 @@ string remove_trailing_zeros(double numb) {
   return strnumb;
 }
 
-#if ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__)))
+#if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
 vector<vector<string>> nfd_filter(string input) {
   input = string_replace_all(input, "\r", "");
   input = string_replace_all(input, "\n", "");
@@ -652,7 +652,7 @@ const char *get_open_filename(const char *filter, const char *fname) {
 }
 
 const char *get_open_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
-  #if ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__)))
+  #if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
   NFD_Init();
   static string res;
   nfdu8char_t *outPath;
@@ -723,7 +723,7 @@ const char *get_open_filenames(const char *filter, const char *fname) {
 }
 
 const char *get_open_filenames_ext(const char *filter, const char *fname, const char *dir, const char *title) {
-  #if ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__)))
+  #if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
   NFD_Init();
   string res;
   static string final_res;
@@ -812,7 +812,7 @@ const char *get_save_filename(const char *filter, const char *fname) {
 }
 
 const char *get_save_filename_ext(const char *filter, const char *fname, const char *dir, const char *title) {
-  #if ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__)))
+  #if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
   NFD_Init();
   static string res;
   nfdu8char_t *outPath;
@@ -882,7 +882,7 @@ const char *get_directory(const char *dname) {
 }
 
 const char *get_directory_alt(const char *capt, const char *root) {
-  #if (defined(__linux__) && !defined(__ANDROID__))
+  #if (USE_XDG_DESKTOP_PORTAL && ((defined(__linux__) && !defined(__ANDROID__)) || (defined(__FreeBSD__) || defined(__FreeBSD_kernel__))))
   NFD_Init();
   static string res;
   nfdu8char_t *outPath;
