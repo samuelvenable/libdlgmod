@@ -5,7 +5,7 @@ Where applicable, this library will use `kdialog` for Qt dialogs on KDE-based Fr
 
 Supports Windows, macOS, Linux, FreeBSD, DragonFly BSD, NetBSD, OpenBSD, Solaris, and illumos. No third-party dependencies. If `kdialog` or `zenity` do not exist on the target Free Desktop platform you can use whatever fallback of your choosing. Setting the owner window needs to take on one the following forms: an `HWND` on Windows, an `NSWindow *` on macOS, or an `XID`/`Window` on X11/XWayland for Free Desktop platforms. 
 
-The owner window handle needs to be casted to an unsigned integer pointer, wrapped into a C-string, and then passed to `widget_set_owner(owner)` to function; if you do not do this on macOS, OSAScript will be used instead of native AppKit, which disables the ability to use a multiple file filter drop down box. 
+The owner window handle needs to be casted to an unsigned integer pointer, wrapped into a C-string, and then passed to `widget_set_owner(owner)` to function; if you do not do this on macOS, OSAScript will be used instead of native AppKit, which disables the ability to use a multiple file filter drop down box for the file selection dialogs. 
 
 Click the animated GIF slideshows below to view documentation and screenshots:
 
