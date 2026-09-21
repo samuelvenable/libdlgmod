@@ -684,7 +684,7 @@ namespace dialog_module {
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
       apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
-      std::this_thread::sleep_for(std::chrono::milliseconds(200));
+      std::this_thread::sleep_for(std::chrono::seconds(1));
       std::vector<HWND> wins = windows_from_proc_id(proc_id);
       for (int i = 0; i < wins.size(); i++) {
         HWND dlg = wins[i];
