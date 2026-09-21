@@ -496,7 +496,7 @@ namespace dialog_module {
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
             Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
-           png->GetHICON(&hIcon);
+            png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
             Gdiplus::GdiplusShutdown(m_gdiplusToken);
@@ -667,7 +667,7 @@ namespace dialog_module {
       if (!fp) { return ""; }
       Evaluation = "WScript.Echo " + Evaluation;
       std::size_t result = fwrite(Evaluation.data(), sizeof(char), Evaluation.length(), fp);
-      if (result < Evaluation.length()) { fclose(fp); if (o && IsWindow(o)) { return ""; }
+      if (result < Evaluation.length()) { fclose(fp); }
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
       apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
