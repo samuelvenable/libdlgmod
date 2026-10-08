@@ -16,3 +16,5 @@ Click the animated GIF slideshows below to view documentation and screenshots:
 [![macos.gif](resources/macos.gif)](resources/macos/README.md)
 
 [![linux.gif](resources/linux.gif)](resources/linux/README.md)
+
+[![freebsd.gif](resources/freebsd.gif)](resources/freebsd/README.md)
