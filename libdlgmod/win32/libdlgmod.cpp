@@ -32,6 +32,7 @@ SOFTWARE.
 
 #include <fstream>
 #include <sstream>
+#include <locale>
 #include <vector>
 #include <string>
 #include <thread>
@@ -1044,8 +1045,11 @@ namespace dialog_module {
       }
       InputBoxResult.clear();
       std::wifstream file(wstring(wtemp) + L"output.txt", std::ios::in);
+      file.imbue(std::locale("en_US.UTF-8"));
       if (file.is_open()) {
-        std::getline(file, InputBoxResult);
+        wstring line;
+        std::getline(file, line);
+        InputBoxResult = narrow(line);
         file.close();
       }
       while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
