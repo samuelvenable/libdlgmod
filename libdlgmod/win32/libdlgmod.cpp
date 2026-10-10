@@ -30,7 +30,6 @@ SOFTWARE.
 #include <cstring>
 #include <clocale>
 
-#include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -1035,12 +1034,25 @@ namespace dialog_module {
         }  
       }
       InputBoxResult.clear();
-      std::wifstream file(narrow(wtemp) + "output.txt", std::ios::binary);
-      if (file.is_open()) {
-        std::wstringstream wss;
-        wss << file.rdbuf();
-        InputBoxResult = narrow(wss.str());
-        file.close();
+      FILE *fp = nullptr;
+      if (!_wfopen_s(&fp, (wstring(wtemp) + L"output.txt").c_str(), L"rb, ccs=UTF-8" )) {
+        if (fp) { 
+          int fd = _dup(_fileno(fp));
+          if (fd != -1) {
+            struct _stat info; 
+            int sz = _fstat(fd, &info);
+            if (sz > 0) {
+              char *buffer = new char[sz];
+              long result = _read(fd, buffer, sz);
+              if (result > 0) { 
+                InputBoxResult = buffer ? buffer : "";
+              }
+              delete[] buffer;
+            }
+            _close(fd);
+          }
+          fclose(fp);
+        }
       }
       DeleteFileW((wstring(wtemp) + L"output.txt").c_str());
       while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
