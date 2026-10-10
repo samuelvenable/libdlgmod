@@ -498,6 +498,8 @@ static inline void SetErrorHandlers() {
   XSetIOErrorHandler(XIOErrorHandlerImpl);
 }
 
+void XSetIcon(Display *display, Window window, const char *icon);
+
 static inline void change_relative_to_qt() {
   cancel_pressed = false;
   if (dm_dialogengine == dm_x11) {
@@ -595,6 +597,7 @@ static inline void change_relative_to_qt() {
         XStoreName(display, window, "Fatal Error");
         XSelectInput(display, window, ExposureMask | KeyPressMask);
         XMapWindow(display, window);
+        XSetIcon(display, window, widget_get_icon());
         const char *err1 = "Both zenity and kdialog are not found in your system's $PATH environment variable.";
         const char *err2 = "Please install either zenity and/or kdialog with your system's package manager";
         const char *err3 = "before attempting to run this application. You may press any key to abort..."; 
