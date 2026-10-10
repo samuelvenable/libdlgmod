@@ -32,6 +32,7 @@ SOFTWARE.
 
 #include <fstream>
 #include <sstream>
+#include <locale>
 #include <vector>
 #include <string>
 #include <thread>
@@ -1035,14 +1036,15 @@ namespace dialog_module {
         }  
       }
       InputBoxResult.clear();
-      std::wifstream file(narrow(wtemp) + "output.txt");
+      std::wifstream file(narrow(wtemp) + "output.txt", std::ios::binary);
+      file.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
       if (file.is_open()) {
-        wstring line;
-        std::getline(file, line);
-        InputBoxResult = narrow(line);
+        std::wstringstream wss;
+        wss << file.rdbuf();
+        InputBoxResult = narrow(wss.str());
         file.close();
       }
-      //DeleteFileW((wstring(wtemp) + L"output.txt").c_str());
+      DeleteFileW((wstring(wtemp) + L"output.txt").c_str());
       while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
         InputBoxResult.back() == '\t' || InputBoxResult.back() == '\r' || InputBoxResult.back() == '\n'))
         InputBoxResult.pop_back();
