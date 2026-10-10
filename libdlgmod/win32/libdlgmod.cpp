@@ -32,7 +32,6 @@ SOFTWARE.
 
 #include <fstream>
 #include <sstream>
-#include <locale>
 #include <vector>
 #include <string>
 #include <thread>
@@ -1038,7 +1037,6 @@ namespace dialog_module {
       InputBoxResult.clear();
       std::wifstream file(narrow(wtemp) + "output.txt", std::ios::binary);
       if (file.is_open()) {
-        file.imbue(std::locale(std::locale::empty());
         std::wstringstream wss;
         wss << file.rdbuf();
         InputBoxResult = narrow(wss.str());
