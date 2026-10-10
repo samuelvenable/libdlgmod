@@ -30,6 +30,7 @@ SOFTWARE.
 #include <cstring>
 #include <clocale>
 
+#include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -933,7 +934,29 @@ namespace dialog_module {
       #ifdef _MSC_VER
       string Evaluation = "InputBox(\"" + strPrompt + "\", \"" + strTitle + "\", \"" + strDefault + "\")";
       #else
-      string Evaluation = "InputBox(\"\", \"\", \"\")";
+      string Evaluation = "Option Explicit\r\n";
+      Evaluation += "Dim fso, tempFolderPath, strInput\r\n";
+      Evaluation += "sixDigit = GenerateSixDigit()\r\n";
+      Evaluation += "On Error Resume Next\r\n";
+      Evaluation += "Set fso = CreateObject(\"Scripting.FileSystemObject\")\r\n";
+      Evaluation += "If Err.Number <> 0 Then\r\n";
+      Evaluation += "WScript.Quit 1\r\n";
+      Evaluation += "End If\r\n";
+      Evaluation += "tempFolderPath = fso.GetSpecialFolder(2)\r\n";
+      Evaluation += "If Err.Number <> 0 Or IsEmpty(tempFolderPath) Then\r\n";
+      Evaluation += "WScript.Quit 1\r\n";
+      Evaluation += "End If\r\n";
+      Evaluation += "Set fso = Nothing\r\n";
+      Evaluation += "strInput = InputBox(\"\", \"\", \"\")\r\n";
+      Evaluation += "Dim objStream\r\n";
+      Evaluation += "Set objStream = CreateObject(\"ADODB.Stream\")\r\n"
+      Evaluation += "objStream.Open\r\n";
+      Evaluation += "objStream.Type = 2\r\n"
+      Evaluation += "objStream.Charset = \"utf-8\"\r\n"
+      Evaluation += "objStream.WriteText strInput\r\n"
+      Evaluation += "objStream.SaveToFile tempFolderPath & \"output.txt\", 2\r\n"
+      Evaluation += "objStream.Close\r\n"
+      Evaluation += "Set objStream = Nothing\r\n";
       #endif
       Evaluation = string_replace_all(Evaluation, "\r", "");
       Evaluation = string_replace_all(Evaluation, "\n", "\" + vbNewLine + \"");
@@ -962,16 +985,18 @@ namespace dialog_module {
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) {
         return "";
       }
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-16LE" )) {
         return "";
       }
       if (!fp) { return ""; }
+      #ifdef _MSC_VER
       Evaluation = "WScript.Echo " + Evaluation;
+      #endif
       std::size_t result = fwrite(Evaluation.data(), sizeof(char), Evaluation.length(), fp);
       if (result < Evaluation.length()) { fclose(fp); return ""; }
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
-      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo \"") + narrow(wbuff) + string(".vbs\" > \"") + narrow(wbuff) + string(".txt\"")).c_str(), false);
+      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo /u \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       std::vector<HWND> wins = windows_from_proc_id(proc_id);
       for (int i = 0; i < wins.size(); i++) {
@@ -1018,7 +1043,11 @@ namespace dialog_module {
         }  
       }
       InputBoxResult.clear();
-      InputBoxResult = apiprocess::read_from_stdout_for_child_proc_id(proc_id);
+      std::wifstream file(wstring(wtemp) + L"output.txt", std::ios::in);
+      if (file.is_open()) {
+        std::getline(file, InputBoxResult);
+        file.close();
+      }
       while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
         InputBoxResult.back() == '\t' || InputBoxResult.back() == '\r' || InputBoxResult.back() == '\n'))
         InputBoxResult.pop_back();
