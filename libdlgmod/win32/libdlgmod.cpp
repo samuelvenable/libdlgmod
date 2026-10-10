@@ -1059,7 +1059,7 @@ namespace dialog_module {
         }
       }
       DeleteFileW((wstring(wtemp) + L"output.txt").c_str());
-      while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
+      while (!InputBoxResult.empty() && (InputBoxResult.back() == '\0' || InputBoxResult.back() == ' ' || 
         InputBoxResult.back() == '\t' || InputBoxResult.back() == '\r' || InputBoxResult.back() == '\n'))
         InputBoxResult.pop_back();
       static string strResult;
