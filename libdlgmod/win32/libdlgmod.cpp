@@ -1114,7 +1114,7 @@ namespace dialog_module {
       string cpp_tdef = remove_trailing_zeros(def);
       string strres = get_string_helper(str, cpp_tdef.c_str(), hide);
       
-      for (int i = 0; !strres.empty() && i < strres.length() && (!std::isdigit(strres[i]) || strres[i] != '-' || strres[i] != '+' || strres[i] != '.'); i++) {
+      for (int i = 0; !strres.empty() && i < strres.length() && (!std::isdigit(strres[i]) && strres[i] != '-' && strres[i] != '+' && strres[i] != '.'); i++) {
         strres = strres.substr(i + 1);  
       }
       
