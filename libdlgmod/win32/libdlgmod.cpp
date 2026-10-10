@@ -1112,7 +1112,7 @@ namespace dialog_module {
       string strres = get_string_helper(str, cpp_tdef.c_str(), hide);
       
       for (int i = 0; !strres.empty() && i < strres.length() && !std::isdigit(strres[i]); i++) {
-        strres = strres.substr(i);  
+        strres = strres.substr(i + 1);  
       }
       
       double result = strtod(strres.c_str(), nullptr);
