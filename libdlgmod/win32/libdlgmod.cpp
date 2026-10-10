@@ -1035,12 +1035,13 @@ namespace dialog_module {
       }
       InputBoxResult.clear();
       fp = nullptr;
-      if (!_wfopen_s(&fp, (wstring(wtemp) + L"output.txt").c_str(), L"rb, ccs=UTF-8" )) {
+      if (!_wfopen_s(&fp, (wstring(wtemp) + L"output.txt").c_str(), L"rb, ccs=UTF-16LE" )) {
         if (fp) { 
           int fd = _dup(_fileno(fp));
           if (fd != -1) {
             struct _stat info; 
             int sz = _fstat(fd, &info);
+            dialog_module::show_message(std::to_string(sz).c_str());
             if (sz > 0) {
               char *buffer = new char[sz];
               long result = _read(fd, buffer, sz);
