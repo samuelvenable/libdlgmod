@@ -919,12 +919,14 @@ namespace dialog_module {
       #endif
 
       // Replace quotes with double quotes
+      #ifdef _MSC_VER
       string strPrompt = string_replace_all(Prompt, "\"", "\"\"");
       string strTitle = string_replace_all(Title, "\"", "\"\"");
-      #ifdef _MSC_VER
       string strDefault = string_replace_all(Default, "\"", "\"\"");
       #else
-      string strDefault = ((!hidden) ? string_replace_all(Default, "\"", "\"\"") : "");
+      string strPrompt = Prompt;
+      string strTitle = Title;
+      string strDefault = Default;
       wstring wstrDefault = widen(Default);
       wstring wstrPrompt = widen(Prompt);
       wstring wstrTitle = widen(Title);
@@ -938,7 +940,6 @@ namespace dialog_module {
       #else
       string Evaluation = "Option Explicit\r\n";
       Evaluation += "Dim fso, tempFolderPath, strInput\r\n";
-      Evaluation += "sixDigit = GenerateSixDigit()\r\n";
       Evaluation += "On Error Resume Next\r\n";
       Evaluation += "Set fso = CreateObject(\"Scripting.FileSystemObject\")\r\n";
       Evaluation += "If Err.Number <> 0 Then\r\n";
