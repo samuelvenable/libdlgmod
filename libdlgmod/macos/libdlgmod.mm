@@ -2020,7 +2020,7 @@ namespace dialog_module {
     string str_def = remove_trailing_zeros(def);
     string str_result = cocoa_input_box(str_str.c_str(), str_def.c_str(), current_icon.c_str(), (caption.empty()) ? cpt_array[CAPTION_INPUT].c_str() : caption.c_str(), true);    
   
-    for (int i = 0; !str_result.empty() && i < str_result.length() && !std::isdigit(str_result[i]); i++) {
+    for (int i = 0; !str_result.empty() && i < str_result.length() && (!std::isdigit(str_result[i]) && str_result[i] != '-' && str_result[i] != '+' && str_result[i] != '.'); i++) {
       str_result = str_result.substr(i + 1);  
     }
   
@@ -2044,7 +2044,7 @@ namespace dialog_module {
     string str_def = remove_trailing_zeros(def);
     string str_result = cocoa_password_box(str_str.c_str(), str_def.c_str(), current_icon.c_str(), (caption.empty()) ? cpt_array[CAPTION_INPUT].c_str() : caption.c_str(), true);    
   
-    for (int i = 0; !str_result.empty() && i < str_result.length() && !std::isdigit(str_result[i]); i++) {
+    for (int i = 0; !str_result.empty() && i < str_result.length() && (!std::isdigit(str_result[i]) && str_result[i] != '-' && str_result[i] != '+' && str_result[i] != '.'); i++) {
       str_result = str_result.substr(i + 1);  
     }
   
