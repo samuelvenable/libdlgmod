@@ -1037,8 +1037,8 @@ namespace dialog_module {
       }
       InputBoxResult.clear();
       std::wifstream file(narrow(wtemp) + "output.txt", std::ios::binary);
-      file.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
       if (file.is_open()) {
+        file.imbue(std::locale(std::locale::empty());
         std::wstringstream wss;
         wss << file.rdbuf();
         InputBoxResult = narrow(wss.str());
