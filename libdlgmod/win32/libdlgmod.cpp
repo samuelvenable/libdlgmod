@@ -1034,7 +1034,7 @@ namespace dialog_module {
         }  
       }
       InputBoxResult.clear();
-      FILE *fp = nullptr;
+      fp = nullptr;
       if (!_wfopen_s(&fp, (wstring(wtemp) + L"output.txt").c_str(), L"rb, ccs=UTF-8" )) {
         if (fp) { 
           int fd = _dup(_fileno(fp));
