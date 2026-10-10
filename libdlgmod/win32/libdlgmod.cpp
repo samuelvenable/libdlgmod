@@ -931,7 +931,11 @@ namespace dialog_module {
       #endif
 
       // Create evaluation string
+      #ifdef _MSC_VER
       string Evaluation = "InputBox(\"" + strPrompt + "\", \"" + strTitle + "\", \"" + strDefault + "\")";
+      #else
+      string Evaluation = "InputBox(\"\", \"\", \"\")";
+      #endif
       Evaluation = string_replace_all(Evaluation, "\r", "");
       Evaluation = string_replace_all(Evaluation, "\n", "\" + vbNewLine + \"");
       wstring WideEval = widen(Evaluation);
@@ -987,6 +991,7 @@ namespace dialog_module {
           SendDlgItemMessageW(dlg, 1000, WM_SETTEXT, 0, (LPARAM)wstrDefault.c_str());
           if (hidden == true) {
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
+            SendDlgItemMessageW(dlg, 1000, WM_LBUTTONDOWN, 0, 0);
           }
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
