@@ -1083,6 +1083,8 @@ namespace dialog_module {
       #endif
       if (strResult.empty()) {
         cancel_pressed = true;
+      } else {
+        cancel_pressed = false;
       }
       return strResult.c_str();
     }
