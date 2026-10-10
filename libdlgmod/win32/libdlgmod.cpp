@@ -1050,7 +1050,7 @@ namespace dialog_module {
         InputBoxResult = narrow(line);
         file.close();
       }
-      DeleteFile((wstring(wtemp) + L"output.txt").c_str());
+      DeleteFileW((wstring(wtemp) + L"output.txt").c_str());
       while (!InputBoxResult.empty() && (InputBoxResult.back() == ' ' || 
         InputBoxResult.back() == '\t' || InputBoxResult.back() == '\r' || InputBoxResult.back() == '\n'))
         InputBoxResult.pop_back();
