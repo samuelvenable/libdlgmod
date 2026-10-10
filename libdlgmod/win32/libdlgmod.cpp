@@ -962,7 +962,7 @@ namespace dialog_module {
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) {
         return "";
       }
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-16LE" )) {
         return "";
       }
       if (!fp) { return ""; }
@@ -971,7 +971,7 @@ namespace dialog_module {
       if (result < Evaluation.length()) { fclose(fp); return ""; }
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
-      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
+      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo /u \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       std::vector<HWND> wins = windows_from_proc_id(proc_id);
       for (int i = 0; i < wins.size(); i++) {
