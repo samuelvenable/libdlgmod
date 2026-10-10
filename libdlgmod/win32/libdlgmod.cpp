@@ -1044,7 +1044,7 @@ namespace dialog_module {
         }  
       }
       InputBoxResult.clear();
-      std::wifstream file(wstring(wtemp) + L"output.txt", std::ios::in);
+      std::wifstream file(wstring(wtemp) + L"output.txt", std::wios::in);
       file.imbue(std::locale("en_US.UTF-8"));
       if (file.is_open()) {
         wstring line;
