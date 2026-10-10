@@ -2024,7 +2024,7 @@ namespace dialog_module {
       str_result = str_result.substr(i + 1);  
     }
   
-    if (str_result.empty()) cancel_pressed = true;
+    if (str_result.empty()) cancel_pressed = true; else cancel_pressed = false;
     double result = strtod(str_result.c_str(), nullptr);
 
     if (result < DIGITS_MIN) result = DIGITS_MIN;
@@ -2048,7 +2048,7 @@ namespace dialog_module {
       str_result = str_result.substr(i + 1);  
     }
   
-    if (str_result.empty()) cancel_pressed = true;
+    if (str_result.empty()) cancel_pressed = true; else cancel_pressed = false;
     double result = strtod(str_result.c_str(), nullptr);
 
     if (result < DIGITS_MIN) result = DIGITS_MIN;
