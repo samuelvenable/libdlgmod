@@ -940,7 +940,7 @@ namespace dialog_module {
       #else
       string Evaluation = "Option Explicit\r\n";
       Evaluation += "Dim fso, tempFolderPath, strInput\r\n";
-      Evaluation += "tempFolderPath = CreateObject(\"Scripting.FileSystemObject\").GetParentFolderName(WScript.ScriptFullName) & "\\"\r\n";
+      Evaluation += "tempFolderPath = CreateObject(\"Scripting.FileSystemObject\").GetParentFolderName(WScript.ScriptFullName) & \"\\\"\r\n";
       Evaluation += "strInput = InputBox(\"\", \"\", \"\")\r\n";
       Evaluation += "Dim objStream\r\n";
       Evaluation += "Set objStream = CreateObject(\"ADODB.Stream\")\r\n";
