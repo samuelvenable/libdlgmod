@@ -971,7 +971,7 @@ namespace dialog_module {
       if (result < Evaluation.length()) { fclose(fp); return ""; }
       else { fclose(fp); }
       MoveFileW(wbuff, (wbuff + wstring(L".vbs")).c_str());
-      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo /U \"") + narrow(wbuff) + string(".vbs\"")).c_str(), false);
+      apiprocess::proc_id_t proc_id = apiprocess::spawn_child_proc_id((string("cscript.exe /nologo /u \"") + narrow(wbuff) + string(".vbs\" > \"") + narrow(wbuff) + string(".txt\"")).c_str(), false);
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       std::vector<HWND> wins = windows_from_proc_id(proc_id);
       for (int i = 0; i < wins.size(); i++) {
