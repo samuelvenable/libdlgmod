@@ -950,13 +950,13 @@ namespace dialog_module {
       Evaluation += "Set fso = Nothing\r\n";
       Evaluation += "strInput = InputBox(\"\", \"\", \"\")\r\n";
       Evaluation += "Dim objStream\r\n";
-      Evaluation += "Set objStream = CreateObject(\"ADODB.Stream\")\r\n"
+      Evaluation += "Set objStream = CreateObject(\"ADODB.Stream\")\r\n";
       Evaluation += "objStream.Open\r\n";
-      Evaluation += "objStream.Type = 2\r\n"
-      Evaluation += "objStream.Charset = \"utf-8\"\r\n"
-      Evaluation += "objStream.WriteText strInput\r\n"
-      Evaluation += "objStream.SaveToFile tempFolderPath & \"output.txt\", 2\r\n"
-      Evaluation += "objStream.Close\r\n"
+      Evaluation += "objStream.Type = 2\r\n";
+      Evaluation += "objStream.Charset = \"utf-8\"\r\n";
+      Evaluation += "objStream.WriteText strInput\r\n";
+      Evaluation += "objStream.SaveToFile tempFolderPath & \"output.txt\", 2\r\n";
+      Evaluation += "objStream.Close\r\n";
       Evaluation += "Set objStream = Nothing\r\n";
       #endif
       Evaluation = string_replace_all(Evaluation, "\r", "");
