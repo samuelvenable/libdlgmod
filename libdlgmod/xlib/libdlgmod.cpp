@@ -27,6 +27,7 @@ SOFTWARE.
 */
 
 #include <cstdio>
+#include <cctype>
 #include <cstdlib>
 #include <cstring>
 #include <climits>
