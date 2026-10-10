@@ -1049,7 +1049,7 @@ namespace dialog_module {
                 if (res2 > 0) {
                   buffer[info.st_size] = '\0';
                   InputBoxResult = buffer ? buffer : "";
-                  InputBoxResult = InputBoxResult.substr(2);
+                  InputBoxResult = InputBoxResult.substr(3);
                 }
                 delete[] buffer;
               }
