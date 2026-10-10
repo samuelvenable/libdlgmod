@@ -1009,7 +1009,12 @@ double get_integer(const char *str, double def) {
   if (def > DIGITS_MAX) def = DIGITS_MAX;
 
   string str_def = remove_trailing_zeros(def);
-  string str_result = get_string(str, str_def.c_str());
+  string str_result = get_string(str, str_def);    
+  
+  for (int i = 0; !str_result.empty() && i < str_result.length() && !std::isdigit(str_result[i]); i++) {
+    str_result = str_result.substr(i + 1);  
+  }
+  
   if (str_result.empty()) cancel_pressed = true;
   double result = strtod(str_result.c_str(), nullptr);
 
@@ -1026,7 +1031,12 @@ double get_passcode(const char *str, double def) {
   if (def > DIGITS_MAX) def = DIGITS_MAX;
 
   string str_def = remove_trailing_zeros(def);
-  string str_result = get_password(str, str_def.c_str());
+  string str_result = get_password(str, str_def);    
+  
+  for (int i = 0; !str_result.empty() && i < str_result.length() && !std::isdigit(str_result[i]); i++) {
+    str_result = str_result.substr(i + 1);  
+  }
+  
   if (str_result.empty()) cancel_pressed = true;
   double result = strtod(str_result.c_str(), nullptr);
 
