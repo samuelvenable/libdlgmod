@@ -27,7 +27,6 @@ SOFTWARE.
 #include <cstdlib>
 #include <cstdio>
 #include <cwchar>
-#include <cctype>
 #include <cstring>
 #include <clocale>
 
@@ -1111,13 +1110,7 @@ namespace dialog_module {
       if (def > DIGITS_MAX) def = DIGITS_MAX;
 
       string cpp_tdef = remove_trailing_zeros(def);
-      string strres = get_string_helper(str, cpp_tdef.c_str(), hide);
-      
-      for (int i = 0; !strres.empty() && i < strres.length() && !std::isdigit(strres[i]); i++) {
-        strres = strres.substr(i + 1);  
-      }
-      
-      double result = strtod(strres.c_str(), nullptr);
+      double result = strtod(get_string_helper(str, cpp_tdef.c_str(), hide), nullptr);
 
       if (result < DIGITS_MIN) result = DIGITS_MIN;
       if (result > DIGITS_MAX) result = DIGITS_MAX;
