@@ -476,8 +476,7 @@ namespace dialog_module {
 
     HWND owner_window() {
       hwnds.clear();
-      win = owner ? (HWND)owner : GetForegroundWindow();
-      win = (unsigned long long)win ? win : GetDesktopWindow();
+      win = owner ? (HWND)owner : GetDesktopWindow();
       if (parent) return parent;
       WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
       wc.lpfnWndProc = WndProc;
