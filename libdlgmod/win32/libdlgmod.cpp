@@ -926,6 +926,8 @@ namespace dialog_module {
       #else
       string strDefault = ((!hidden) ? string_replace_all(Default, "\"", "\"\"") : "");
       wstring wstrDefault = widen(Default);
+      wstring wstrPrompt = widen(Prompt);
+      wstring wstrTitle = widen(Title);
       #endif
 
       // Create evaluation string
@@ -957,7 +959,7 @@ namespace dialog_module {
       wchar_t *wbuff = wfname.data(); if (_wmktemp_s(wbuff, wfname.length() + 1)) {
         return "";
       }
-      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-16LE" )) {
+      if (_wfopen_s(&fp, wbuff, L"wb, ccs=UTF-8" )) {
         return "";
       }
       if (!fp) { return ""; }
@@ -980,10 +982,11 @@ namespace dialog_module {
           } else {
             cancel_pressed = false;
           }
+          SetWindowTextW(dlg, wstrTitle.c_str());
+          SendDlgItemMessageW(dlg, 1001, WM_SETTEXT, 0, (LPARAM)wstrPrompt.c_str());
+          SendDlgItemMessageW(dlg, 1000, WM_SETTEXT, 0, (LPARAM)wstrDefault.c_str());
           if (hidden == true) {
-            SendDlgItemMessageW(dlg, 1000, WM_SETTEXT, 0, (LPARAM)wstrDefault.c_str());
             SendDlgItemMessageW(dlg, 1000, EM_SETPASSWORDCHAR, L'\x25cf', 0);
-            SendDlgItemMessageW(dlg, 1000, WM_LBUTTONDOWN, 0, 0);
           }
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
