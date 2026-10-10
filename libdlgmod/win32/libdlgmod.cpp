@@ -1040,17 +1040,18 @@ namespace dialog_module {
           int fd = _dup(_fileno(fp));
           if (fd != -1) {
             struct _stat info; 
-            int sz = _fstat(fd, &info);
-            dialog_module::show_message(std::to_string(sz).c_str());
-            if (sz > 0) {
-              char *buffer = new char[sz];
-              long result = _read(fd, buffer, sz);
-              if (result > 0) { 
-                InputBoxResult = buffer ? buffer : "";
+            int res1 = _fstat(fd, &info);
+            if (!res1) {
+              if (info.st_size > 0) {
+                char *buffer = new char[info.st_size];
+                long res2 = _read(fd, buffer, info.st_size);
+                if (res2 > 0) { 
+                  InputBoxResult = buffer ? buffer : "";
+                }
+                delete[] buffer;
               }
-              delete[] buffer;
+              _close(fd);
             }
-            _close(fd);
           }
           fclose(fp);
         }
