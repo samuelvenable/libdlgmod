@@ -933,6 +933,8 @@ namespace dialog_module {
       // Create evaluation string
       #ifdef _MSC_VER
       string Evaluation = "InputBox(\"" + strPrompt + "\", \"" + strTitle + "\", \"" + strDefault + "\")";
+      Evaluation = string_replace_all(Evaluation, "\r", "");
+      Evaluation = string_replace_all(Evaluation, "\n", "\" + vbNewLine + \"");
       #else
       string Evaluation = "Option Explicit\r\n";
       Evaluation += "Dim fso, tempFolderPath, strInput\r\n";
@@ -958,8 +960,6 @@ namespace dialog_module {
       Evaluation += "objStream.Close\r\n";
       Evaluation += "Set objStream = Nothing\r\n";
       #endif
-      Evaluation = string_replace_all(Evaluation, "\r", "");
-      Evaluation = string_replace_all(Evaluation, "\n", "\" + vbNewLine + \"");
       wstring WideEval = widen(Evaluation);
 
       #ifdef _MSC_VER
