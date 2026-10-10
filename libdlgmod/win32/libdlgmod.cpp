@@ -651,14 +651,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -705,14 +705,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -743,14 +743,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -777,14 +777,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -867,14 +867,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
@@ -947,7 +947,7 @@ namespace dialog_module {
       Evaluation += "objStream.Open\r\n";
       Evaluation += "objStream.Type = 2\r\n";
       Evaluation += "objStream.Charset = \"utf-8\"\r\n";
-      Evaluation += "objStream.WriteText strInput\r\n";
+      Evaluation += "If Len(strInput) <> 0 Then objStream.WriteText strInput\r\n";
       Evaluation += "objStream.SaveToFile tempFolderPath & \"output.txt\", 2\r\n";
       Evaluation += "objStream.Close\r\n";
       Evaluation += "Set objStream = Nothing\r\n";
@@ -1012,14 +1012,14 @@ namespace dialog_module {
           wstring cpp_wstr_icon = widen(tstr_icon);
           if (PathFileExistsW(cpp_wstr_icon.c_str())) {
             HICON hIcon;
-            ULONG_PTR m_gdiplusToken;
+            ULONG_PTR gdiplusToken;
             Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-            Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+            Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
             Bitmap *png = Bitmap::FromFile(cpp_wstr_icon.c_str());
             png->GetHICON(&hIcon);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
             delete png;
-            Gdiplus::GdiplusShutdown(m_gdiplusToken);
+            Gdiplus::GdiplusShutdown(gdiplusToken);
           } else {
             HICON hIcon = GetIcon(win);
             PostMessage(dlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
