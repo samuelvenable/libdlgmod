@@ -75,6 +75,7 @@ namespace dialog_module {
 
 namespace {
 
+#if !defined(LIBDLGMOD_SUPPRESS_DEPENDENCY_ERROR)
 int displayX            = -1;
 int displayY            = -1;
 
@@ -153,6 +154,7 @@ int display_get_height() {
   displayHeight = result;
   return result;
 }
+#endif
 
 int const dm_x11     = -1;
 int const dm_zenity  =  0;
