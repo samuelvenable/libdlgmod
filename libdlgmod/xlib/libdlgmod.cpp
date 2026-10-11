@@ -59,7 +59,6 @@ SOFTWARE.
 #include <fcntl.h>
 
 #include <X11/Xlib.h>
-#include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #if !defined(LIBDLGMOD_SUPPRESS_DEPENDENCY_ERROR)
