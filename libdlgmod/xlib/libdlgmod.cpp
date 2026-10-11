@@ -570,22 +570,22 @@ string filename_ext(string fname) {
   return fname.substr(fp);
 }
 
-inline int XErrorHandlerImpl(Display *display, XErrorEvent *event) {
+int XErrorHandlerImpl(Display *display, XErrorEvent *event) {
   return 0;
 }
 
-inline int XIOErrorHandlerImpl(Display *display) {
+int XIOErrorHandlerImpl(Display *display) {
   return 0;
 }
 
-inline void SetErrorHandlers() {
+void SetErrorHandlers() {
   XSetErrorHandler(XErrorHandlerImpl);
   XSetIOErrorHandler(XIOErrorHandlerImpl);
 }
 
 void XSetIcon(Display *display, Window window, const char *icon);
 
-inline void change_relative_to_qt() {
+void change_relative_to_qt() {
   cancel_pressed = false;
   if (dm_dialogengine == dm_x11) {
     bool in_path = false, is_qt = false;
@@ -729,7 +729,7 @@ inline void change_relative_to_qt() {
 }
 
 // set dialog transient; set title caption.
-inline void modify_shell_dialog(PROCID pid) {
+void modify_shell_dialog(PROCID pid) {
   SetErrorHandlers(); int sz = 0;
   WINDOWID *arr = nullptr; Window wid = 0;
   Display *display = XOpenDisplay(nullptr);
