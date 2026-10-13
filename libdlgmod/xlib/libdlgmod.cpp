@@ -596,13 +596,13 @@ void change_relative_to_qt() {
           unsigned int width;
           unsigned int height;
         } XRRCrtcInfoRectangle;
-        auto XRRCrtcInfoGetPrimaryMoniorRectangle = [](Display *display) {
+        auto XRRCrtcInfoGetPrimaryMonitorRectangle = [](Display *display) {
           XRRCrtcInfoRectangle rectangle = { 0, 0, 0, 0 };
           XRRScreenResources *screenRes = nullptr;
           RROutput primaryOutput = 0;
           XRROutputInfo *outputInfo = nullptr;
           XRRCrtcInfo *crtcInfo = nullptr;
-          Window root = DefaultRootWindow(display);
+          Window root = XDefaultRootWindow(display);
           int major = 0, minor = 0;
           if (!XRRQueryVersion(display, &major, &minor)) {
             goto fallback;
@@ -641,25 +641,25 @@ void change_relative_to_qt() {
           XRRFreeScreenResources(screenRes);
           return rectangle;
           fallback:
-          int screen = DefaultScreen(display);
+          int screen = XDefaultScreen(display);
           rectangle.x = 0, rectangle.y = 0;
-          rectangle.width = DisplayWidth(display, screen);
-          rectangle.height = DisplayHeight(display, screen);
+          rectangle.width = XDisplayWidth(display, screen);
+          rectangle.height = XDisplayHeight(display, screen);
           return rectangle;
         };
-        int screen = DefaultScreen(display);
+        int screen = XDefaultScreen(display);
         Window owner = (Window)(std::intptr_t)strtoul(widget_get_owner(), nullptr, 10);
-        Window parent = ((owner) ? owner : RootWindow(display, screen));
-        XRRCrtcInfoRectangle rectangle = XRRCrtcInfoGetPrimaryMoniorRectangle(display);
+        Window parent = ((owner) ? owner : XRootWindow(display, screen));
+        XRRCrtcInfoRectangle rectangle = XRRCrtcInfoGetPrimaryMonitorRectangle(display);
         int xpos = 0, ypos = 0;
         if (rectangle.x != 0 || rectangle.y != 0 || rectangle.width != 0 || rectangle.height != 0) {
           xpos = rectangle.x + ((rectangle.width - 550) / 2);
           ypos = rectangle.y + ((rectangle.height - (32 * 4)) / 2);
         }
         Window window = XCreateSimpleWindow(display, parent, 
-        0, 0, 550, 32 * 4, 1, BlackPixel(display, screen), WhitePixel(display, screen));
+        0, 0, 550, 32 * 4, 1, XBlackPixel(display, screen), XWhitePixel(display, screen));
         XStoreName(display, window, "Fatal Error");
-        if (owner && owner != RootWindow(display, screen)) {
+        if (owner && owner != XRootWindow(display, screen)) {
           XStoreName(display, owner, "Fatal Error");
           XSetIcon(display, owner, widget_get_icon());
           XResizeWindow(display, owner, 550, 32 * 4);
@@ -681,7 +681,7 @@ void change_relative_to_qt() {
         XEvent event;
         while (true) {
           XNextEvent(display, &event);
-          if (owner && owner != RootWindow(display, screen)) {
+          if (owner && owner != XRootWindow(display, screen)) {
             XWindowAttributes xattr;
             XStoreName(display, owner, "Fatal Error");
             XSetIcon(display, owner, widget_get_icon());
@@ -689,9 +689,9 @@ void change_relative_to_qt() {
             XResizeWindow(display, window, xattr.width, xattr.height);
           }
           if (event.type == Expose) {
-            XDrawString(display, window, DefaultGC(display, screen), 32, 32, err1, strlen(err1));
-            XDrawString(display, window, DefaultGC(display, screen), 32, 32 * 2, err2, strlen(err2));
-            XDrawString(display, window, DefaultGC(display, screen), 32, 32 * 3, err3, strlen(err3));
+            XDrawString(display, window, XDefaultGC(display, screen), 32, 32, err1, strlen(err1));
+            XDrawString(display, window, XDefaultGC(display, screen), 32, 32 * 2, err2, strlen(err2));
+            XDrawString(display, window, XDefaultGC(display, screen), 32, 32 * 3, err3, strlen(err3));
           }
           if (event.type == KeyPress) {
             break;
